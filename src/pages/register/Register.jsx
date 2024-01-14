@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import Image from '../../assets/utilities/Image/Image';
 import './register.css'
+import Paragraph from '../../assets/utilities/Paragraph';
+import RegImg from '../../assets/images/registration/registration.png';
 
 
 
@@ -31,13 +33,14 @@ const Login = () => {
             <Grid container spacing={0}>
                 <Grid item xs={6}>
                     <div className="image">
-                        <Image source={LoginImg} alt="login image" />
+                        <Image source={RegImg} alt="login image" />
                     </div>
                 </Grid>
                 <Grid item xs={6}>
                     <div className="loginBox">
                         <Box>
                             <SectionHeading style='section_heading' text="Get started with easily register" />
+                            <Paragraph style="reg_subheading" text='Free register and you can enjoy it.' />
                             <div className="login_input">
                                 <TextField fullWidth id="email" label="Email Addres" variant="outlined" />
                                 <TextField fullWidth id="name" label="Ful name" variant="outlined" />
