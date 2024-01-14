@@ -50,11 +50,14 @@ span {
     color: #03014C;
     font-size: 13px;
     font-weight: 400;
+    padding: 10px 0;
 }
 
 .login_footer h5 span {
     color: #EA6C00;
     font-weight: 700;
+    cursor: pointer;
+    padding-left: 5px;
 }
 
 .image {
@@ -68,6 +71,8 @@ span {
     object-fit: cover;
 }
 
+/* password field eye on off css */
+
 .eye {
     position: relative;
 }
@@ -76,4 +81,20 @@ span {
     position: absolute;
     right: 10px;
     top: 18px;
+}
+
+
+/* reset password modal css */
+
+
+.login_modal_content {
+    color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.login_modal_content svg {
+    font-size: 55px;
 }

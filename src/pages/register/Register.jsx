@@ -7,9 +7,9 @@ import SectionHeading from '../../components/SectionHeading';
 import LoginImg from '../../../public/login/login.png';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import Image from '../../assets/utilities/Image/Image';
+import Image from '../../utilities/Image/Image';
 import './register.css'
-import Paragraph from '../../assets/utilities/Paragraph';
+import Paragraph from '../../utilities/Paragraph';
 import RegImg from '../../assets/images/registration/registration.png';
 
 
