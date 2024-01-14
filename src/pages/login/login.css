@@ -67,3 +67,13 @@ span {
     height: 100%;
     object-fit: cover;
 }
+
+.eye {
+    position: relative;
+}
+
+.eye span {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}

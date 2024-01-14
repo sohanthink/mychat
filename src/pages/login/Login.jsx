@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -10,6 +10,8 @@ import LoginImg from '../../../public/login/login.png';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import Image from '../../assets/utilities/Image/Image';
+import { IoEyeOutline } from "react-icons/io5";
+import { GoEyeClosed } from "react-icons/go";
 
 
 
@@ -27,6 +29,9 @@ const BootstrapButton = styled(Button)({
 
 
 const Login = () => {
+    const [show, setShow] = useState(false);
+
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={0}>
@@ -39,8 +44,21 @@ const Login = () => {
                                 <span>Login with Google</span>
                             </div>
                             <div className="login_input">
-                                <TextField fullWidth id="outlined-basic" label="Email Addres" variant="standard" />
-                                <TextField fullWidth id="outlined" label="Enter your password" variant="standard" />
+                                <div>
+                                    <TextField fullWidth id="outlined-basic" label="Email Addres" variant="standard" />
+                                </div>
+                                <div className='eye'>
+                                    <TextField fullWidth id="outlined" type={show ? "text" : "password"} label="Enter your password" variant="standard" />
+                                    <span onClick={() => setShow(!show)}>
+                                        {
+                                            show
+                                                ?
+                                                <IoEyeOutline />
+                                                :
+                                                <GoEyeClosed />
+                                        }
+                                    </span>
+                                </div>
                             </div>
                             <div className="btn">
                                 {/* <Button fullWidth variant="contained">Login to Continue</Button> */}
