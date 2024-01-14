@@ -1,5 +1,8 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
 .loginBox {
-    background-color: rgb(224, 255, 199);
     width: 100%;
     height: 100vh;
     display: flex;
@@ -52,4 +55,14 @@ span {
 .login_footer h5 span {
     color: #EA6C00;
     font-weight: 700;
+}
+
+.image {
+    height: 100vh;
+}
+
+.image img {
+    width: 100%;
+    background-size: cover;
+    height: 100%;
 }

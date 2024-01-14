@@ -5,9 +5,12 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import './login.css'
-import SectionHeading from '../../assets/components/SectionHeading';
+import SectionHeading from '../../components/SectionHeading';
 import GoogleSvg from '../../../public/googlesvg.png';
+import LoginImg from '../../../public/login/login.png';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
+import Image from '../../assets/utilities/Image/Image';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -59,12 +62,12 @@ const Login = () => {
                         <Box>
                             <SectionHeading style='section_heading' text="Login to your account!" />
                             <div className="loginProvidor">
-                                <img src={GoogleSvg} alt="" srcset="" />
+                                <img src={GoogleSvg} alt="" />
                                 <span>Login with Google</span>
                             </div>
                             <div className="login_input">
                                 <TextField fullWidth id="outlined-basic" label="Email Addres" variant="standard" />
-                                <TextField fullWidth id="outlined-basic" label="Enter your password" variant="standard" />
+                                <TextField fullWidth id="outlined" label="Enter your password" variant="standard" />
                             </div>
                             <div className="btn">
                                 {/* <Button fullWidth variant="contained">Login to Continue</Button> */}
@@ -73,16 +76,18 @@ const Login = () => {
                                 </BootstrapButton>
                             </div>
                             <div className="login_footer">
-                                <h5>Don’t have an account ? <span> Sign up</span></h5>
+                                <h5>Don’t have an account ? <Link to="/registration"> <span> Sign up</span> </Link></h5>
                             </div>
                         </Box>
                     </div>
                 </Grid>
                 <Grid item xs={6}>
-                    <h2>ok</h2>
+                    <div className="image">
+                        <Image source={LoginImg} alt="login image" />
+                    </div>
                 </Grid>
-            </Grid>
-        </Box>
+            </Grid >
+        </Box >
     )
 }
 
