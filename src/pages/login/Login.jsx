@@ -92,7 +92,7 @@ const Login = () => {
                                         <TextField fullWidth id="outlined-basic" label="Email Addres" variant="standard" />
                                     </div>
                                     <div className='eye'>
-                                        <TextField fullWidth id="outlined" type={show ? "text" : "password"} label="Enter your password" variant="standard" />
+                                        <TextField onChange={handleForm} fullWidth id="outlined" type={show ? "text" : "password"} label="Enter your password" variant="standard" />
                                         <span onClick={() => setShow(!show)}>
                                             {
                                                 show
