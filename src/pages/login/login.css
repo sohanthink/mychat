@@ -42,6 +42,10 @@
     flex-direction: column;
 }
 
+.loginBox .login_input .error {
+    margin-top: 15px;
+}
+
 .loginBox .login_footer {
     margin: 35px 0;
 }

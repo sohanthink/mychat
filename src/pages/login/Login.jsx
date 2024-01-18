@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import Image from '../../utilities/Image/Image';
 import { IoEyeOutline } from "react-icons/io5";
 import { GoEyeClosed } from "react-icons/go";
-import { Modal } from '@mui/material';
+import { Alert, Modal } from '@mui/material';
 import Paragraph from '../../utilities/Paragraph';
 import { MdLockReset } from "react-icons/md";
 
@@ -75,6 +75,60 @@ const Login = () => {
     const handleClose = () => setOpen(false);
 
 
+    // login validation ==============================
+
+    let [loginFormData, setLoginFormData] = useState({
+        name: "",
+        email: "",
+    })
+
+    let handleForm = (e) => {
+        // setLoginFormData(e.target.value)
+
+        // console.log(e.target.name, e.target.value);
+        let { name, value } = e.target
+
+        setLoginFormData({
+            ...loginFormData,
+            [name]: value,
+        })
+
+        // if (e.target.name = 'e.target.value') {
+        //     console.log('checkig');
+        // }
+    }
+
+    let [emailError, setEmailError] = useState('');
+    let [passwordError, setpasswordError] = useState('');
+
+    let handleSubmit = () => {
+        // email validation checking with regex
+        if (loginFormData.email) {
+            if (loginFormData.email.match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            )) {
+                setEmailError("")
+            } else {
+                setEmailError("Please Enter A Valid Email");
+            }
+        } else {
+            setEmailError("Please Enter An Email")
+        }
+
+        // password validation
+        if (loginFormData.password) {
+            setpasswordError("")
+        } else {
+            setpasswordError("You must Enter a Password")
+        }
+
+        if (!emailError && !passwordError) {
+            console.log(loginFormData);
+        }
+
+    }
+
+
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -89,10 +143,15 @@ const Login = () => {
                                 </div>
                                 <div className="login_input">
                                     <div>
-                                        <TextField fullWidth id="outlined-basic" label="Email Addres" variant="standard" />
+                                        <TextField onChange={handleForm} name='email' fullWidth id="outlined-basic" label="Email Addres" variant="standard" />
+                                        <div className="error">
+                                            {emailError &&
+                                                <Alert severity="warning">{emailError}</Alert>
+                                            }
+                                        </div>
                                     </div>
                                     <div className='eye'>
-                                        <TextField onChange={handleForm} fullWidth id="outlined" type={show ? "text" : "password"} label="Enter your password" variant="standard" />
+                                        <TextField onChange={handleForm} name='password' fullWidth id="outlined" type={show ? "text" : "password"} label="Enter your password" variant="standard" />
                                         <span onClick={() => setShow(!show)}>
                                             {
                                                 show
@@ -102,11 +161,14 @@ const Login = () => {
                                                     <GoEyeClosed />
                                             }
                                         </span>
+                                        {passwordError &&
+                                            <Alert severity="warning">{passwordError}</Alert>
+                                        }
                                     </div>
                                 </div>
                                 <div className="btn">
                                     {/* <Button fullWidth variant="contained">Login to Continue</Button> */}
-                                    <BootstrapButton fullWidth variant="contained">
+                                    <BootstrapButton onClick={handleSubmit} fullWidth variant="contained">
                                         Login to Continue
                                     </BootstrapButton>
                                 </div>
