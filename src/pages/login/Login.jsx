@@ -92,10 +92,6 @@ const Login = () => {
             ...loginFormData,
             [name]: value,
         })
-
-        // if (e.target.name = 'e.target.value') {
-        //     console.log('checkig');
-        // }
     }
 
     let [emailError, setEmailError] = useState('');
@@ -122,11 +118,34 @@ const Login = () => {
             setpasswordError("You must Enter a Password")
         }
 
+        // submit the data if only there is no error
         if (!emailError && !passwordError) {
             console.log(loginFormData);
         }
 
     }
+
+
+
+
+    let [forgot, setForgot] = useState('')
+    let handleForgot = (e) => {
+        let { value } = e.target
+        setForgot({ value })
+    }
+    let handleForgotSubmit = () => {
+        // console.log(forgot.value);
+        if (!forgot) {
+            console.log("Please Enter Your Email");
+        } else if (forgot.match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )) {
+            console.log('Valid Email / A reset link will be sent to your email');
+        } else {
+            console.log('Please input a valid email');
+        }
+    }
+
 
 
     return (
@@ -205,9 +224,9 @@ const Login = () => {
                         <SectionHeading text="Forgot Password?" />
                         <Paragraph text="You can reset password here" />
                         <ThemeProvider theme={customTheme(createTheme)}>
-                            <TextField fullWidth id="outlined-basic" label="Enter Your Email Addres" variant="standard" />
+                            <TextField name='forgotField' onChange={handleForgot} fullWidth id="outlined-basic" label="Enter Your Email Addres" variant="standard" />
                         </ThemeProvider>
-                        <BootstrapButton fullWidth variant="contained">
+                        <BootstrapButton onClick={handleForgotSubmit} fullWidth variant="contained">
                             Send Link To Reset Password
                         </BootstrapButton>
                     </div>
