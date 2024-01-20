@@ -8,9 +8,10 @@
     align-items: center;
     justify-content: space-between;
     background-color: #5F35F5;
-    height: 90vh;
+    height: 98vh;
     padding: 50px 0;
     gap: 30px;
+    border-radius: 20px;
 }
 
 .sidebarBox .topbar {
