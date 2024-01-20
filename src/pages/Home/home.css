@@ -57,3 +57,13 @@
     border: none;
     color: white;
 }
+
+
+
+
+.usermainbox .useritem .userinfobox button.userbutton {
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 20px;
+    line-height: 20px;
+}

@@ -4,6 +4,10 @@ import { Box, Grid } from '@mui/material'
 import GroupCard from '../../components/home/GroupCard'
 import GroupList from './GroupList'
 import Friends from './Friends'
+import UserList from './UserList'
+import FriendRequest from './FriendRequest'
+import MyGroups from './MyGroups'
+import BlockedUser from './BlockedUser'
 
 
 const Home = () => {
@@ -15,17 +19,26 @@ const Home = () => {
                     <GroupList />
                 </Grid>
 
-                <Grid xs={4} sx={{ padding: '0px 15px', marginBottom: '30px' }}>
+                <Grid xs={4} sx={{ padding: '0px 30px', marginBottom: '30px' }}>
                     <Friends />
                 </Grid>
 
                 <Grid xs={4} sx={{ marginBottom: '30px' }}>
-                    <GroupCard cardtitle='User Lists' ></GroupCard>
+                    <UserList />
                 </Grid>
 
                 <Grid xs={4} sx={{ marginBottom: '30px' }}>
-                    <GroupCard cardtitle='Friend Request' ></GroupCard>
+                    <FriendRequest />
                 </Grid>
+
+                <Grid xs={4} sx={{ padding: '0px 30px', marginBottom: '30px' }}>
+                    <MyGroups />
+                </Grid>
+
+                <Grid xs={4} sx={{ marginBottom: '30px' }}>
+                    <BlockedUser />
+                </Grid>
+
             </Grid>
         </Box >
     )
