@@ -9,3 +9,9 @@
     font-weight: 300;
     padding: 15px 0 30px 0;
 }
+
+.login_input .reg_error {
+
+    padding: 10px;
+    font-size: 20px;
+}
