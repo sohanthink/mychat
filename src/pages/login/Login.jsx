@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField';
 import { ThemeProvider, styled, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -78,7 +78,7 @@ const Login = () => {
     // login validation ==============================
 
     let [loginFormData, setLoginFormData] = useState({
-        name: "",
+        password: "",
         email: "",
     })
 
@@ -96,13 +96,13 @@ const Login = () => {
 
     let [emailError, setEmailError] = useState('');
     let [passwordError, setpasswordError] = useState('');
+    let emailregex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
 
     let handleSubmit = () => {
         // email validation checking with regex
         if (loginFormData.email) {
-            if (loginFormData.email.match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            )) {
+            if (loginFormData.email.match(emailregex)) {
                 setEmailError("")
             } else {
                 setEmailError("Please Enter A Valid Email");
@@ -123,15 +123,63 @@ const Login = () => {
             console.log(loginFormData);
         }
 
+        // useEffect(() => {
+        //     if (!emailError && !passwordError) {
+        //         console.log(loginFormData);
+        //     }
+        // }, [emailError, passwordError]);
+
     }
 
 
+    // const handleSubmit = () => {
+
+    //     if (!loginFormData.email && !loginFormData.password) {
+    //         setEmailError("You must Enter an Email")
+    //         setpasswordError("You must Enter a Password")
+    //     } else {
+    //         if (!loginFormData.email) {
+    //             setEmailError("You must Enter an Email")
+    //             setpasswordError("")
+
+    //         } else if (!loginFormData.password) {
+
+    //             setpasswordError("You must Enter a Password")
+    //             // checking email error when 
+    //             if (!loginFormData.email.match(
+    //                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    //             )) {
+
+    //                 setEmailError("Please Enter A Valid Email");
+    //             } else {
+    //                 setEmailError('')
+
+    //             }
+    //         } else {
+    //             if (loginFormData.email.match(
+    //                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    //             )) {
+    //                 setEmailError("")
+    //                 setpasswordError("")
+    //                 console.log(loginFormData.email, loginFormData.password);
+
+    //                 loginFormData.password = ""
+    //                 loginFormData.email = ""
+
+    //             } else {
+    //                 setEmailError("Please Enter A Valid Email");
+    //             }
+    //         }
+    //     }
+
+
+    // }
 
 
     let [forgot, setForgot] = useState('')
     let handleForgot = (e) => {
         let { value } = e.target
-        setForgot({ value })
+        setForgot(value)
     }
     let handleForgotSubmit = () => {
         // console.log(forgot.value);
@@ -162,7 +210,7 @@ const Login = () => {
                                 </div>
                                 <div className="login_input">
                                     <div>
-                                        <TextField onChange={handleForm} name='email' fullWidth id="outlined-basic" label="Email Addres" variant="standard" />
+                                        <TextField onChange={handleForm} value={loginFormData.email} name='email' fullWidth id="outlined-basic" label="Email Addres" variant="standard" />
                                         <div className="error">
                                             {emailError &&
                                                 <Alert severity="warning">{emailError}</Alert>
@@ -170,7 +218,7 @@ const Login = () => {
                                         </div>
                                     </div>
                                     <div className='eye'>
-                                        <TextField onChange={handleForm} name='password' fullWidth id="outlined" type={show ? "text" : "password"} label="Enter your password" variant="standard" />
+                                        <TextField onChange={handleForm} value={loginFormData.password} name='password' fullWidth id="outlined" type={show ? "text" : "password"} label="Enter your password" variant="standard" />
                                         <span onClick={() => setShow(!show)}>
                                             {
                                                 show
