@@ -78,8 +78,8 @@ const Login = () => {
     // login validation ==============================
 
     let [loginFormData, setLoginFormData] = useState({
-        password: "",
         email: "",
+        password: "",
     })
 
     let handleForm = (e) => {
@@ -100,6 +100,9 @@ const Login = () => {
 
 
     let handleSubmit = () => {
+
+        // console.log(loginFormData);
+
         // email validation checking with regex
         if (loginFormData.email) {
             if (loginFormData.email.match(emailregex)) {
@@ -120,7 +123,9 @@ const Login = () => {
 
         // submit the data if only there is no error
         if (!emailError && !passwordError) {
-            console.log(loginFormData);
+            // console.log(loginFormData);
+            console.log(emailError)
+            console.log(passwordError)
         }
 
         // useEffect(() => {
