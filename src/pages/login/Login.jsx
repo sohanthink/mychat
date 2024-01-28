@@ -122,17 +122,17 @@ const Login = () => {
         }
 
         // submit the data if only there is no error
-        if (!emailError && !passwordError) {
-            // console.log(loginFormData);
-            console.log(emailError)
-            console.log(passwordError)
-        }
+        // if (!emailError && !passwordError) {
+        //     // console.log(loginFormData);
+        //     console.log(emailError)
+        //     console.log(passwordError)
+        // }
 
-        // useEffect(() => {
-        //     if (!emailError && !passwordError) {
-        //         console.log(loginFormData);
-        //     }
-        // }, [emailError, passwordError]);
+        useEffect(() => {
+            if (!emailError && !passwordError) {
+                console.log(loginFormData);
+            }
+        }, [emailError, passwordError]);
 
     }
 
