@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react'
+=======
+import React, { useState } from 'react'
+>>>>>>> registration
 import TextField from '@mui/material/TextField';
 import { ThemeProvider, styled, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -118,14 +122,22 @@ const Login = () => {
             setpasswordError("You must Enter a Password")
         }
 
+<<<<<<< HEAD
 
     }
     useEffect(() => {
+=======
+>>>>>>> registration
         // submit the data if only there is no error
         if (!emailError && !passwordError) {
             console.log(loginFormData);
         }
+<<<<<<< HEAD
     }, [emailError, passwordError])
+=======
+
+    }
+>>>>>>> registration
 
 
 
