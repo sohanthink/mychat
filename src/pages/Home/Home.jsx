@@ -1,7 +1,6 @@
 import React from 'react'
 import './home.css'
 import { Box, Grid } from '@mui/material'
-import GroupCard from '../../components/home/GroupCard'
 import GroupList from './GroupList'
 import Friends from './Friends'
 import UserList from './UserList'

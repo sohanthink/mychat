@@ -1,7 +1,6 @@
-import { Box, Grid, ListItem } from '@mui/material'
+import { Box, Grid } from '@mui/material'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import { styled } from '@mui/material/styles';
 import Sidebar from './Sidebar';
 import './layout.css'
 
@@ -16,7 +15,7 @@ const RootLayout = () => {
                             <Sidebar />
                         </div>
                     </Grid>
-                    <Grid xs={10}>
+                    <Grid item xs={10}>
                         <div className="outletbox">
                             <Outlet />
                         </div>

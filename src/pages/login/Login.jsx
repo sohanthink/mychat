@@ -119,7 +119,7 @@ const Login = () => {
 
         // submit the data if only there is no error
         if (!emailError && !passwordError) {
-            // console.log(loginFormData);
+            console.log(loginFormData);
         }
 
     }
