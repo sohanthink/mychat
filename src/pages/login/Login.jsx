@@ -154,7 +154,10 @@ const Login = () => {
                     <Grid item xs={6}>
                         <div className="loginBox">
                             <Box>
-                                <SectionHeading style='section_heading' text="Login to your account!" />
+                                <SectionHeading
+                                    style='section_heading'
+                                    text="Login to your account!"
+                                />
                                 <div className="loginProvidor">
                                     <img src={GoogleSvg} alt="" />
                                     <span>Login with Google</span>
@@ -194,8 +197,9 @@ const Login = () => {
                                                     <GoEyeClosed />
                                             }
                                         </span>
-                                        {passwordError &&
-                                            <Alert severity="warning">{passwordError}</Alert>
+
+                                        {
+                                            passwordError && <Alert severity="warning">{passwordError}</Alert>
                                         }
                                     </div>
                                 </div>
@@ -252,7 +256,6 @@ const Login = () => {
                     </div>
                 </Box>
             </Modal>
-
         </>
     )
 }
