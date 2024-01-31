@@ -1,7 +1,4 @@
-
-import React, { useEffect, useState } from 'react'
 import React, { useState } from 'react'
->>>>>>> registration
 import TextField from '@mui/material/TextField';
 import { ThemeProvider, styled, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -120,150 +117,144 @@ const Login = () => {
             setpasswordError("You must Enter a Password")
         }
 
-<<<<<<< HEAD
-
-    }
-    useEffect(() => {
         // submit the data if only there is no error
         if (!emailError && !passwordError) {
-            console.log(loginFormData);
+            // console.log(loginFormData);
         }
-    }, [emailError, passwordError])
 
-}
->>>>>>> registration
-
-
-
-
-let [forgot, setForgot] = useState('')
-let handleForgot = (e) => {
-    let { value } = e.target
-    setForgot({ value })
-}
-let handleForgotSubmit = () => {
-    // console.log(forgot.value);
-    if (!forgot) {
-        console.log("Please Enter Your Email");
-    } else if (forgot.match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    )) {
-        console.log('Valid Email / A reset link will be sent to your email');
-    } else {
-        console.log('Please input a valid email');
     }
-}
 
 
 
-return (
-    <>
-        <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={0}>
-                <Grid item xs={6}>
-                    <div className="loginBox">
-                        <Box>
-                            <SectionHeading style='section_heading' text="Login to your account!" />
-                            <div className="loginProvidor">
-                                <img src={GoogleSvg} alt="" />
-                                <span>Login with Google</span>
-                            </div>
-                            <div className="login_input">
-                                <div>
-                                    <TextField
-                                        onChange={handleForm}
-                                        value={loginFormData.email}
-                                        name='email'
-                                        fullWidth id="outlined-basic"
-                                        label="Email Addres"
-                                        variant="standard"
-                                    />
-                                    <div className="error">
-                                        {emailError &&
-                                            <Alert severity="warning">{emailError}</Alert>
+
+    let [forgot, setForgot] = useState('')
+    let handleForgot = (e) => {
+        let { value } = e.target
+        setForgot({ value })
+    }
+    let handleForgotSubmit = () => {
+        // console.log(forgot.value);
+        if (!forgot) {
+            console.log("Please Enter Your Email");
+        } else if (forgot.match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )) {
+            console.log('Valid Email / A reset link will be sent to your email');
+        } else {
+            console.log('Please input a valid email');
+        }
+    }
+
+
+
+    return (
+        <>
+            <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={0}>
+                    <Grid item xs={6}>
+                        <div className="loginBox">
+                            <Box>
+                                <SectionHeading style='section_heading' text="Login to your account!" />
+                                <div className="loginProvidor">
+                                    <img src={GoogleSvg} alt="" />
+                                    <span>Login with Google</span>
+                                </div>
+                                <div className="login_input">
+                                    <div>
+                                        <TextField
+                                            onChange={handleForm}
+                                            value={loginFormData.email}
+                                            name='email'
+                                            fullWidth id="outlined-basic"
+                                            label="Email Addres"
+                                            variant="standard"
+                                        />
+                                        <div className="error">
+                                            {emailError &&
+                                                <Alert severity="warning">{emailError}</Alert>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className='eye'>
+                                        <TextField
+                                            onChange={handleForm}
+                                            value={loginFormData.password}
+                                            name='password'
+                                            fullWidth id="outlined"
+                                            type={show ? "text" : "password"}
+                                            label="Enter your password"
+                                            variant="standard"
+                                        />
+                                        <span onClick={() => setShow(!show)}>
+                                            {
+                                                show
+                                                    ?
+                                                    <IoEyeOutline />
+                                                    :
+                                                    <GoEyeClosed />
+                                            }
+                                        </span>
+                                        {passwordError &&
+                                            <Alert severity="warning">{passwordError}</Alert>
                                         }
                                     </div>
                                 </div>
-                                <div className='eye'>
-                                    <TextField
-                                        onChange={handleForm}
-                                        value={loginFormData.password}
-                                        name='password'
-                                        fullWidth id="outlined"
-                                        type={show ? "text" : "password"}
-                                        label="Enter your password"
-                                        variant="standard"
-                                    />
-                                    <span onClick={() => setShow(!show)}>
-                                        {
-                                            show
-                                                ?
-                                                <IoEyeOutline />
-                                                :
-                                                <GoEyeClosed />
-                                        }
-                                    </span>
-                                    {passwordError &&
-                                        <Alert severity="warning">{passwordError}</Alert>
-                                    }
+                                <div className="btn">
+                                    {/* <Button fullWidth variant="contained">Login to Continue</Button> */}
+                                    <BootstrapButton onClick={handleSubmit} fullWidth variant="contained">
+                                        Login to Continue
+                                    </BootstrapButton>
                                 </div>
-                            </div>
-                            <div className="btn">
-                                {/* <Button fullWidth variant="contained">Login to Continue</Button> */}
-                                <BootstrapButton onClick={handleSubmit} fullWidth variant="contained">
-                                    Login to Continue
-                                </BootstrapButton>
-                            </div>
-                            <div className="login_footer">
-                                <h5>Don’t have an account ? <Link to="/registration"> <span> Sign up</span> </Link></h5>
-                                <h5>Forgot Password ? <span onClick={handleOpen}> Click To Reset</span> </h5>
-                            </div>
-                        </Box>
-                    </div>
-                </Grid>
-                <Grid item xs={6}>
-                    <div className="image">
-                        <Image source={LoginImg} alt="login image" />
-                    </div>
-                </Grid>
-            </Grid >
-        </Box >
+                                <div className="login_footer">
+                                    <h5>Don’t have an account ? <Link to="/registration"> <span> Sign up</span> </Link></h5>
+                                    <h5>Forgot Password ? <span onClick={handleOpen}> Click To Reset</span> </h5>
+                                </div>
+                            </Box>
+                        </div>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <div className="image">
+                            <Image source={LoginImg} alt="login image" />
+                        </div>
+                    </Grid>
+                </Grid >
+            </Box >
 
 
-        {/* --------------------------------------------------------------------- 
+            {/* --------------------------------------------------------------------- 
             --------------- forgot password design started here ---------------------
             ---------------------------------------------------------------------- */}
 
 
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-            <Box sx={style}>
-                <div className="login_modal_content">
-                    <MdLockReset />
-                    <SectionHeading text="Forgot Password?" />
-                    <Paragraph text="You can reset password here" />
-                    <ThemeProvider theme={customTheme(createTheme)}>
-                        <TextField
-                            name='forgotField'
-                            onChange={handleForgot}
-                            fullWidth id="outlined-basic"
-                            label="Enter Your Email Addres"
-                            variant="standard"
-                        />
-                    </ThemeProvider>
-                    <BootstrapButton onClick={handleForgotSubmit} fullWidth variant="contained">
-                        Send Link To Reset Password
-                    </BootstrapButton>
-                </div>
-            </Box>
-        </Modal>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <div className="login_modal_content">
+                        <MdLockReset />
+                        <SectionHeading text="Forgot Password?" />
+                        <Paragraph text="You can reset password here" />
+                        <ThemeProvider theme={customTheme(createTheme)}>
+                            <TextField
+                                name='forgotField'
+                                onChange={handleForgot}
+                                fullWidth id="outlined-basic"
+                                label="Enter Your Email Addres"
+                                variant="standard"
+                            />
+                        </ThemeProvider>
+                        <BootstrapButton onClick={handleForgotSubmit} fullWidth variant="contained">
+                            Send Link To Reset Password
+                        </BootstrapButton>
+                    </div>
+                </Box>
+            </Modal>
 
-    </>
-)
+        </>
+    )
 }
 
 export default Login
