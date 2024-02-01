@@ -173,6 +173,7 @@ const Login = () => {
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={0}>
                     <Grid item xs={6}>
+                    <form onSubmit={formik.handleSubmit}>
                         <div className="loginBox">
                             <Box>
                                 <SectionHeading
@@ -186,23 +187,25 @@ const Login = () => {
                                 <div className="login_input">
                                     <div>
                                         <TextField
-                                            onChange={handleForm}
-                                            value={loginFormData.email}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.email}
                                             name='email'
                                             fullWidth id="outlined-basic"
                                             label="Email Addres"
                                             variant="standard"
                                         />
                                         <div className="error">
-                                            {emailError &&
-                                                <Alert severity="warning">{emailError}</Alert>
-                                            }
+                                        {
+                                            formik.touched.email && formik.errors.email ? (
+                                                <Alert severity="error">{formik.errors.email}</Alert>
+                                            ) : null
+                                        }
                                         </div>
                                     </div>
                                     <div className='eye'>
                                         <TextField
-                                            onChange={handleForm}
-                                            value={loginFormData.password}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.password}
                                             name='password'
                                             fullWidth id="outlined"
                                             type={show ? "text" : "password"}
@@ -220,13 +223,15 @@ const Login = () => {
                                         </span>
 
                                         {
-                                            passwordError && <Alert severity="warning">{passwordError}</Alert>
+                                            formik.touched.password && formik.errors.password ? (
+                                                <Alert severity="error">{formik.errors.password}</Alert>
+                                            ) : null
                                         }
                                     </div>
                                 </div>
                                 <div className="btn">
                                     {/* <Button fullWidth variant="contained">Login to Continue</Button> */}
-                                    <BootstrapButton onClick={handleSubmit} fullWidth variant="contained">
+                                    <BootstrapButton type='submit'fullWidth variant="contained">
                                         Login to Continue
                                     </BootstrapButton>
                                 </div>
@@ -236,6 +241,7 @@ const Login = () => {
                                 </div>
                             </Box>
                         </div>
+                    </form>
                     </Grid>
                     <Grid item xs={6}>
                         <div className="image">
