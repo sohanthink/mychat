@@ -140,10 +140,13 @@ const Login = () => {
                 .email('Invalid email address')
                 .required('Email Required'),
         }),
-        onSubmit: values => {
-            // alert(JSON.stringify(values, null, 2));
+        onSubmit: (values, { resetForm }) => {
             console.log(values);
-        },
+            // Your form submission logic here
+      
+            // Reset the form after successful submission
+            resetForm();
+          },
     });
 
 
