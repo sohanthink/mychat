@@ -15,7 +15,8 @@ import { GoEyeClosed } from "react-icons/go";
 import { Alert, Modal } from '@mui/material';
 import Paragraph from '../../utilities/Paragraph';
 import { MdLockReset } from "react-icons/md";
-
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 
 // text fields customization
@@ -77,53 +78,73 @@ const Login = () => {
 
     // login validation ==============================
 
-    let [loginFormData, setLoginFormData] = useState({
-        password: "",
-        email: "",
-    })
+    // let [loginFormData, setLoginFormData] = useState({
+    //     password: "",
+    //     email: "",
+    // })
 
-    let handleForm = (e) => {
-        // setLoginFormData(e.target.value)
+    // let handleForm = (e) => {
+    //     // setLoginFormData(e.target.value)
 
-        // console.log(e.target.name, e.target.value);
-        let { name, value } = e.target
+    //     // console.log(e.target.name, e.target.value);
+    //     let { name, value } = e.target
 
-        setLoginFormData({
-            ...loginFormData,
-            [name]: value,
-        })
-    }
+    //     setLoginFormData({
+    //         ...loginFormData,
+    //         [name]: value,
+    //     })
+    // }
 
-    let [emailError, setEmailError] = useState('');
-    let [passwordError, setpasswordError] = useState('');
-    let emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    // let [emailError, setEmailError] = useState('');
+    // let [passwordError, setpasswordError] = useState('');
+    // let emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-    let handleSubmit = () => {
-        // email validation checking with regex
-        if (loginFormData.email) {
-            if (loginFormData.email.match(emailRegex)) {
-                setEmailError("")
-            } else {
-                setEmailError("Please Enter A Valid Email");
-            }
-        } else {
-            setEmailError("Please Enter An Email")
-        }
+    // let handleSubmit = () => {
+    //     // email validation checking with regex
+    //     if (loginFormData.email) {
+    //         if (loginFormData.email.match(emailRegex)) {
+    //             setEmailError("")
+    //         } else {
+    //             setEmailError("Please Enter A Valid Email");
+    //         }
+    //     } else {
+    //         setEmailError("Please Enter An Email")
+    //     }
 
-        // password validation
-        if (loginFormData.password) {
-            setpasswordError("")
-        } else {
-            setpasswordError("You must Enter a Password")
-        }
+    //     // password validation
+    //     if (loginFormData.password) {
+    //         setpasswordError("")
+    //     } else {
+    //         setpasswordError("You must Enter a Password")
+    //     }
 
-        // submit the data if only there is no error
-        if (!emailError && !passwordError) {
-            console.log(loginFormData);
-        }
+    //     // submit the data if only there is no error
+    //     if (!emailError && !passwordError) {
+    //         console.log(loginFormData);
+    //     }
 
-    }
+    // }
 
+    let emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: Yup.object({
+            password: Yup.string()
+                .max(15, 'Must be 15 characters or less')
+                .required(' Password Required'),
+            email: Yup.string()
+                .matches(emailRegex, 'Invalid email address')
+                .email('Invalid email address')
+                .required('Email Required'),
+        }),
+        onSubmit: values => {
+            // alert(JSON.stringify(values, null, 2));
+            console.log(values);
+        },
+    });
 
 
 
