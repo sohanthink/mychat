@@ -11,7 +11,16 @@
 }
 
 .login_input .reg_error {
-
     padding: 10px;
     font-size: 20px;
+}
+.loginBox .btn .loading{
+    padding: 20px 0;
+    background-color: #5F34F5;
+    color: white;
+    border-radius: 10px;
+    text-transform: capitalize;
+}
+.loginBox .btn span{
+    color: white;
 }
