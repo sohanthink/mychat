@@ -13,6 +13,9 @@ import RegImg from '../../assets/images/registration/registration.png';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@mui/material';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const BootstrapButton = styled(Button)({
@@ -27,6 +30,15 @@ const BootstrapButton = styled(Button)({
 
 });
 
+// toastify code Using Formik ==============================================================
+
+    
+const notify = () => {
+    toast('Notification message!', {
+      position: 'top-right',
+      autoClose: 2000, // milliseconds
+    });
+  };
 
 const Register = () => {
 
@@ -54,7 +66,28 @@ const Register = () => {
         onSubmit: (values, { resetForm }) => {
             console.log(values);
             // Your form submission logic here
-      
+
+
+
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, values.email, values.password)
+            .then((userCredential)=>{
+                console.log('success');
+            })
+            .catch((error)=>{
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode);
+                console.log(errorMessage);
+                if(errorCode == "auth/email-already-in-use"){
+                    toast.success("LoggedIn Successful");    
+                }
+                else{
+                    notify("An error occurred. Please try again later.");
+                }
+            })
+
+
             // Reset the form after successful submission
             resetForm();
           },
@@ -133,6 +166,22 @@ const Register = () => {
                 </Grid>
 
             </Grid >
+
+
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme='light'
+            />
+
+
         </Box >
     )
 }
