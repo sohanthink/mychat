@@ -35,13 +35,13 @@ const BootstrapButton = styled(Button)({
 
 // toastify code Using Formik ==============================================================
 
-    
+
 const notify = () => {
     toast('Notification message!', {
-      position: 'top-right',
-      autoClose: 1000, // milliseconds
+        position: 'top-right',
+        autoClose: 1000, // milliseconds
     });
-  };
+};
 
 
 
@@ -80,34 +80,34 @@ const Register = () => {
             const auth = getAuth();
             SetLoading(true)
             createUserWithEmailAndPassword(auth, values.email, values.password)
-            .then((userCredential)=>{
-                navigate('/')
-                toast.success("Registered Successfully");
-            })
-            .catch((error)=>{
-                const errorCode = error.code;
-                const errorMessage = error.message;
+                .then((userCredential) => {
+                    navigate('/')
+                    toast.success("Registered Successfully");
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
 
-                console.log(errorCode);
-                console.log(errorMessage);
+                    // console.log(errorCode);
+                    // console.log(errorMessage);
 
-                if(errorCode == "auth/email-already-in-use"){
-                    toast.error("Email is already in use");    
-                }
-                else{
-                    toast.error("An error occurred. Please try again later.");
-                }
-            })
+                    if (errorCode == "auth/email-already-in-use") {
+                        toast.error("Email is already in use");
+                    }
+                    else {
+                        toast.error("An error occurred. Please try again later.");
+                    }
+                })
 
 
-            setTimeout(()=>{
+            setTimeout(() => {
                 SetLoading(false)
-            },[2000])
+            }, [2000])
 
 
             // Reset the form after successful submission
             resetForm();
-          },
+        },
     });
 
     return (
@@ -172,23 +172,23 @@ const Register = () => {
                                 <div className="btn">
                                     {
                                         loading
-                                        ?
-                                        <LoadingButton
-                                        className='loading'
-                                        loading
-                                        fullWidth
-                                        loadingPosition="start"
-                                        startIcon={<SaveIcon />}
-                                        variant="contained"
-                                        >
-                                            Sign Up
-                                        </LoadingButton>
-                                        :
-                                        <BootstrapButton type='submit' fullWidth variant="contained">
-                                            Sign Up
-                                        </BootstrapButton>
+                                            ?
+                                            <LoadingButton
+                                                className='loading'
+                                                loading
+                                                fullWidth
+                                                loadingPosition="start"
+                                                startIcon={<SaveIcon />}
+                                                variant="contained"
+                                            >
+                                                Sign Up
+                                            </LoadingButton>
+                                            :
+                                            <BootstrapButton type='submit' fullWidth variant="contained">
+                                                Sign Up
+                                            </BootstrapButton>
                                     }
-                                    
+
                                 </div>
                             </form>
                             <div className="login_footer">
