@@ -81,8 +81,8 @@ const Register = () => {
             SetLoading(true)
             createUserWithEmailAndPassword(auth, values.email, values.password)
             .then((userCredential)=>{
-                toast.success("Registered Successfully");
                 navigate('/')
+                toast.success("Registered Successfully");
             })
             .catch((error)=>{
                 const errorCode = error.code;

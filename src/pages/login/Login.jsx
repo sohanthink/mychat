@@ -17,7 +17,8 @@ import Paragraph from '../../utilities/Paragraph';
 import { MdLockReset } from "react-icons/md";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // text fields customization
 const customTheme = (outerTheme) =>
@@ -65,7 +66,12 @@ const style = {
     p: 4,
 };
 
-
+const notify = () => {
+    toast('Notification message!', {
+      position: 'top-right',
+      autoClose: 1000, // milliseconds
+    });
+  };
 
 const Login = () => {
     const [show, setShow] = useState(false);
