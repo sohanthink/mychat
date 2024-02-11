@@ -22,6 +22,7 @@ const Sidebar = () => {
     const auth = getAuth();
     const navigate = useNavigate();
 
+    // console.log(auth.currentUser.displayName);
     let handleLogout = () => {
         signOut(auth).then(() => {
             navigate('/')
@@ -44,9 +45,9 @@ const Sidebar = () => {
             <div className="sidebarBox">
                 <div className='topbar'>
                     <div className="imgBox">
-                        <Image source='' alt='img' />
+                        <Image source={auth && auth.currentUser.photoURL} alt='img' />
                     </div>
-                    <h3 className='username'>Sohan Mollah</h3>
+                    <h3 className='username'>{auth && auth.currentUser.displayName}</h3>
                 </div>
                 <div>
                     <ul className='navigation'>
