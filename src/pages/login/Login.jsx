@@ -148,7 +148,7 @@ const Login = () => {
         }),
         onSubmit: (values, { resetForm }) => {
             console.log(values);
-            // Your form submission logic here
+            // Your form submission logic goes here
             const auth = getAuth();
             console.log(values.email);
             signInWithEmailAndPassword(auth, values.email, values.password)
