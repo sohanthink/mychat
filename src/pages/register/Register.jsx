@@ -86,16 +86,18 @@ const Register = () => {
                             updateProfile(auth.currentUser, {
                                 displayName: values.name, photoURL: "https://png.pngtree.com/png-clipart/20200225/original/pngtree-beautiful-profile-glyph-vector-icon-png-image_5261832.jpg"
                             }).then(() => {
-
                                 // working here
-                                set(ref(db, 'users/' + userId), {
-                                    username: name,
-                                    email: email,
-                                    profile_picture: imageUrl
+                                set(ref(db, 'users/' + userCredential.user.uid), {
+                                    name: userCredential.user.displayName,
+                                    email: userCredential.user.email,
+                                    profileImg: userCredential.user.photoURL
                                 });
                                 toast.success("Registered Successfully and a verification link was sent");
                                 console.log(userCredential);
-                                navigate('/')
+                                setTimeout(() => {
+                                    navigate('/')
+
+                                }, 3000)
                             }).catch((error) => {
                                 console.log('an error');
                             });
