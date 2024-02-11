@@ -13,13 +13,12 @@ import RegImg from '../../assets/images/registration/registration.png';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Alert } from '@mui/material';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-
-
+import { getDatabase, ref, set } from "firebase/database";
 
 const BootstrapButton = styled(Button)({
     boxShadow: 'none',
@@ -35,7 +34,6 @@ const BootstrapButton = styled(Button)({
 
 // toastify code Using Formik ==============================================================
 
-
 const notify = () => {
     toast('Notification message!', {
         position: 'top-right',
@@ -49,6 +47,7 @@ const Register = () => {
 
 
 
+    const db = getDatabase();
     let [loading, SetLoading] = useState(false)
 
     // Validation code Using Formik ==============================================================
@@ -81,8 +80,28 @@ const Register = () => {
             SetLoading(true)
             createUserWithEmailAndPassword(auth, values.email, values.password)
                 .then((userCredential) => {
-                    navigate('/')
-                    toast.success("Registered Successfully");
+                    console.log(userCredential);
+                    sendEmailVerification(auth.currentUser)
+                        .then(() => {
+                            updateProfile(auth.currentUser, {
+                                displayName: values.name, photoURL: "https://png.pngtree.com/png-clipart/20200225/original/pngtree-beautiful-profile-glyph-vector-icon-png-image_5261832.jpg"
+                            }).then(() => {
+
+                                // working here
+                                set(ref(db, 'users/' + userId), {
+                                    username: name,
+                                    email: email,
+                                    profile_picture: imageUrl
+                                });
+                                toast.success("Registered Successfully and a verification link was sent");
+                                console.log(userCredential);
+                                navigate('/')
+                            }).catch((error) => {
+                                console.log('an error');
+                            });
+                        }).catch((error) => {
+                            toast.success("something wrong");
+                        })
                 })
                 .catch((error) => {
                     const errorCode = error.code;

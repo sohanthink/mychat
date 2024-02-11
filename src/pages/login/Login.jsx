@@ -19,7 +19,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 // text fields customization
 const customTheme = (outerTheme) =>
@@ -81,54 +81,6 @@ const Login = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    // login validation ==============================
-
-    // let [loginFormData, setLoginFormData] = useState({
-    //     password: "",
-    //     email: "",
-    // })
-
-    // let handleForm = (e) => {
-    //     // setLoginFormData(e.target.value)
-
-    //     // console.log(e.target.name, e.target.value);
-    //     let { name, value } = e.target
-
-    //     setLoginFormData({
-    //         ...loginFormData,
-    //         [name]: value,
-    //     })
-    // }
-
-    // let [emailError, setEmailError] = useState('');
-    // let [passwordError, setpasswordError] = useState('');
-    // let emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-    // let handleSubmit = () => {
-    //     // email validation checking with regex
-    //     if (loginFormData.email) {
-    //         if (loginFormData.email.match(emailRegex)) {
-    //             setEmailError("")
-    //         } else {
-    //             setEmailError("Please Enter A Valid Email");
-    //         }
-    //     } else {
-    //         setEmailError("Please Enter An Email")
-    //     }
-
-    //     // password validation
-    //     if (loginFormData.password) {
-    //         setpasswordError("")
-    //     } else {
-    //         setpasswordError("You must Enter a Password")
-    //     }
-
-    //     // submit the data if only there is no error
-    //     if (!emailError && !passwordError) {
-    //         console.log(loginFormData);
-    //     }
-
-    // }
 
     let navigate = useNavigate();
     let emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
@@ -147,22 +99,34 @@ const Login = () => {
                 .required("Email Required"),
         }),
         onSubmit: (values, { resetForm }) => {
-            console.log(values);
+            // console.log(values);
             // Your form submission logic goes here
             const auth = getAuth();
-            console.log(values.email);
+            // console.log(values.email);
             signInWithEmailAndPassword(auth, values.email, values.password)
                 .then((userCredential) => {
                     // Signed in
-                    const user = userCredential.user;
-                    console.log(user);
-                    navigate('/home');
+
+                    if (userCredential.user.emailVerified) {
+                        const user = userCredential.user;
+                        console.log(user);
+                        navigate('/home');
+                    } else {
+                        signOut(auth).then(() => {
+                            toast.error("Please verify your email first from email");
+                        })
+                    }
                     // ...
                 })
                 .catch((error) => {
                     const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(error.message);
+                    if (errorCode == 'auth/invalid-credential') {
+                        toast.error("invalid - credential");
+                    } else if (errorCode == 'auth/too-many-requests') {
+                        toast.error(" temporarily disabled due to many failed login attempts. try later");
+                    } else {
+                        toast.error("Something Wrong. Please try again later");
+                    }
                 });
 
             // Reset the form after successful submission
@@ -194,6 +158,18 @@ const Login = () => {
 
     return (
         <>
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme='light'
+            />
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={0}>
                     <Grid item xs={6}>
