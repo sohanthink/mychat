@@ -45,9 +45,11 @@ const Sidebar = () => {
             <div className="sidebarBox">
                 <div className='topbar'>
                     <div className="imgBox">
-                        <Image source={auth && auth.currentUser.photoURL} alt='img' />
+                        {/* <Image source={auth && auth.currentUser.photoURL} alt='img' /> */}
+                        <Image source='' alt='img' />
                     </div>
-                    <h3 className='username'>{auth && auth.currentUser.displayName}</h3>
+                    {/* <h3 className='username'>{auth && auth.currentUser.displayName}</h3> */}
+                    <h3 className='username'>sohan</h3>
                 </div>
                 <div>
                     <ul className='navigation'>
