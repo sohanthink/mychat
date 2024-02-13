@@ -9,6 +9,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from "firebase/auth";
+import { useSelector, useDispatch } from 'react-redux'
 
 const notify = () => {
     toast('Notification message!', {
@@ -21,6 +22,11 @@ const notify = () => {
 const Sidebar = () => {
     const auth = getAuth();
     const navigate = useNavigate();
+    const data = useSelector(state => state.loginuserdata.value)
+
+    console.log(data.displayName);
+
+
 
     // console.log(auth.currentUser.displayName);
     let handleLogout = () => {
@@ -45,11 +51,11 @@ const Sidebar = () => {
             <div className="sidebarBox">
                 <div className='topbar'>
                     <div className="imgBox">
-                        {/* <Image source={auth && auth.currentUser.photoURL} alt='img' /> */}
-                        <Image source='' alt='img' />
+                        <Image source={data && data.photoURL} alt='img' />
+                        {/* <Image source='' alt='img' /> */}
                     </div>
-                    {/* <h3 className='username'>{auth && auth.currentUser.displayName}</h3> */}
-                    <h3 className='username'>sohan</h3>
+                    <h3 className='username'>{data && data.displayName}</h3>
+                    {/* <h3 className='username'>sohan</h3> */}
                 </div>
                 <div>
                     <ul className='navigation'>
