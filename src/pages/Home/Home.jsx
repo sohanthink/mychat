@@ -7,9 +7,13 @@ import UserList from './UserList'
 import FriendRequest from './FriendRequest'
 import MyGroups from './MyGroups'
 import BlockedUser from './BlockedUser'
+import { loginuser } from '../../slices/userSlice'
+
 
 
 const Home = () => {
+
+    // console.log(loginuser);
     return (
         <Box sx={{ flexGrow: 1, padding: '25px' }}>
             <Grid container spacing={0.5}>

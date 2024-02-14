@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from '../../utilities/Image/Image'
 import { Link, NavLink } from 'react-router-dom'
 import { FiHome } from "react-icons/fi";
@@ -10,6 +10,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from "firebase/auth";
 import { useSelector, useDispatch } from 'react-redux'
+import { loginuser } from '../../slices/userSlice';
+
 
 const notify = () => {
     toast('Notification message!', {
@@ -24,13 +26,21 @@ const Sidebar = () => {
     const navigate = useNavigate();
     const data = useSelector(state => state.loginuserdata.value)
 
-    console.log(data.displayName);
+    // console.log(data.displayName);
 
 
 
-    // console.log(auth.currentUser.displayName);
+    useEffect(() => {
+        if (data === null) {
+            navigate('/')
+        }
+    }, [])
+
+
+
     let handleLogout = () => {
         signOut(auth).then(() => {
+            localStorage.removeItem('user');
             navigate('/')
         })
     }

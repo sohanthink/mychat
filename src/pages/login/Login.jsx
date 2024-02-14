@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { ThemeProvider, styled, createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -86,9 +86,19 @@ const Login = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
   let navigate = useNavigate();
   let emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+
+
+  const data = useSelector(state => state.loginuserdata.value)
+
+  // useEffect(() => {
+  //   if (data) {
+  //     navigate('/home')
+  //   }
+  // }, [])
+
+
   const formik = useFormik({
     initialValues: {
       email: "",
