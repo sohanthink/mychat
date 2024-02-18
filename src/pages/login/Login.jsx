@@ -113,6 +113,8 @@ const Login = () => {
         .email("Invalid email address")
         .required("Email Required"),
     }),
+
+
     onSubmit: (values, { resetForm }) => {
       // console.log(values);
       // Your form submission logic goes here
@@ -156,6 +158,7 @@ const Login = () => {
     let { value } = e.target;
     setForgot({ value });
   };
+
   let handleForgotSubmit = () => {
     // console.log(forgot.value);
     if (!forgot) {
@@ -175,18 +178,9 @@ const Login = () => {
 
   return (
     <>
-      <ToastContainer
-        position='top-right'
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme='light'
-      />
+      <ToastContainer position='top-right' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick
+        rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
+
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={0}>
           <Grid item xs={6}>
