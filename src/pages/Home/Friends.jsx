@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
 
+
+
+
 const Friends = () => {
+
+
+
+
     return (
         <GroupCard cardtitle='Friends'>
             {

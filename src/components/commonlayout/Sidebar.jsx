@@ -30,11 +30,11 @@ const Sidebar = () => {
 
 
 
-    useEffect(() => {
-        if (data === null) {
-            navigate('/')
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (data === null) {
+    //         navigate('/')
+    //     }
+    // }, [])
 
 
 

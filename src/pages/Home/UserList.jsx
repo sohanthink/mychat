@@ -15,7 +15,7 @@ const UserList = () => {
     const db = getDatabase();
 
     const data = useSelector(state => state.loginuserdata.value)
-    console.log(data);
+    // console.log(data);
 
     // userlist from datatbase ===========================================
     useEffect(() => {
@@ -33,17 +33,24 @@ const UserList = () => {
         // console.log(userList);
     }, [])
 
-
+    // console.log(data);
     // send friendrequest data write to  datatbase =========================
     let handleFriendRequest = (item) => {
         // console.log("k click korche :", data.uid);
         // console.log("kake click korche :", item.id);
+        // console.log(item);
+
         set(push(ref(db, 'friendrequest/')), {
             whosendid: data.uid,
             whosendname: data.displayName,
+            whosendemail: data.email,
+            whosendphoto: data.photoURL,
             whoreceivedid: item.id,
             whoreceivedname: item.name,
+            whoreceivedemail: item.email,
+            whoreceivedphoto: item.profileImg,
         });
+
     }
 
     // friendrequest read from datatbase ===========================================
@@ -61,6 +68,9 @@ const UserList = () => {
     }, [])
 
 
+    let handleCancelRequest = (item) => {
+        console.log('cancel clicked', item.id);
+    }
 
 
 
@@ -81,14 +91,18 @@ const UserList = () => {
                                 {
                                     friendRequest.includes(item.id + data.uid)
                                         ?
-                                        <button onClick={() => handleFriendRequest(item)} className='userbutton'>
+                                        <button onClick={() => handleCancelRequest(item)} className='userbutton'>
                                             cancel
                                         </button>
                                         :
-                                        <button onClick={() => handleFriendRequest(item)} className='userbutton'>
-                                            <FaUserPlus />
-                                        </button>
-
+                                        friendRequest.includes(data.uid + item.id) ?
+                                            <button className='userbutton'>
+                                                Pending
+                                            </button>
+                                            :
+                                            <button onClick={() => handleFriendRequest(item)} className='userbutton'>
+                                                <FaUserPlus />
+                                            </button>
                                 }
 
 

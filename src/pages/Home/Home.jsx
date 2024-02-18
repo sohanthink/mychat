@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './home.css'
 import { Box, Grid } from '@mui/material'
 import GroupList from './GroupList'
@@ -7,11 +7,22 @@ import UserList from './UserList'
 import FriendRequest from './FriendRequest'
 import MyGroups from './MyGroups'
 import BlockedUser from './BlockedUser'
-import { loginuser } from '../../slices/userSlice'
-
-
+import { useSelector, useDispatch } from 'react-redux'
+import { loginuser } from '../../slices/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+
+    const data = useSelector(state => state.loginuserdata.value)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (data == null) {
+            navigate('/')
+        }
+    }, [data, navigate])
+
+
 
     // console.log(loginuser);
     return (

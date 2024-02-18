@@ -24,7 +24,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { loginuser } from "../../slices/userSlice";
 
 
-
 // text fields customization
 const customTheme = (outerTheme) =>
   createTheme({
@@ -81,23 +80,22 @@ const Login = () => {
   let dispatch = useDispatch()
   const [show, setShow] = useState(false);
 
-  // modal states from MUI
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  let navigate = useNavigate();
-  let emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-
-
   const data = useSelector(state => state.loginuserdata.value)
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   if (data) {
   //     navigate('/home')
   //   }
-  // }, [])
+  // }, [data, navigate])
 
+  // modal states from MUI
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+
+  let emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
   const formik = useFormik({
     initialValues: {
@@ -174,7 +172,7 @@ const Login = () => {
     }
   };
 
-  // added things
+
 
   return (
     <>
