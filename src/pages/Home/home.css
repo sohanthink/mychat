@@ -58,12 +58,19 @@
   background-color: #5f35f5;
   border: none;
   color: white;
+  cursor: pointer;
 }
-
+.usermainbox .useritem .userinfobox .btn_grp {
+  display: flex;
+  gap: 5px;
+}
+.usermainbox .useritem .userinfobox p {
+  font-size: 13px;
+}
 .usermainbox .useritem .userinfobox button.userbutton {
-  padding: 15px;
-  border-radius: 10px;
-  font-size: 20px;
+  padding: 11px;
+  border-radius: 7px;
+  font-size: 15px;
   line-height: 20px;
   cursor: pointer;
 }

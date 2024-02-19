@@ -9,8 +9,10 @@ import { useSelector } from 'react-redux'
 
 const UserList = () => {
     let [userList, setUserList] = useState([])
+    let [updateuserList, setUpdateUserList] = useState([])
     let [friendRequest, SetFriendRequest] = useState([])
 
+    let [friendsid, setFriendsId] = useState([])
 
     const db = getDatabase();
 
@@ -53,7 +55,7 @@ const UserList = () => {
 
     }
 
-    // friendrequest read from datatbase ===========================================
+    // friendrequest read from datatbase for request send status handaling ====================
     useEffect(() => {
         const friendrequestRef = ref(db, 'friendrequest/');
         onValue(friendrequestRef, (snapshot) => {
@@ -68,16 +70,82 @@ const UserList = () => {
     }, [])
 
 
+
     let handleCancelRequest = (item) => {
         console.log('cancel clicked', item.id);
     }
 
 
+    // already friends data shown for map the user
+    useEffect(() => {
+        const starCountRef = ref(db, 'friends/');
+        onValue(starCountRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                arr.push(item.val().whoreceivedid && item.val().whosendid);
+            })
+            setFriendsId(arr)
+        });
+    }, [])
+    // console.log(friendsid);
+
+    useEffect(() => {
+        let arr = [];
+        userList.forEach((item) => {
+            if (!friendsid.includes(item.id)) {
+                arr.push(item);
+            }
+        });
+        setUpdateUserList(arr);
+    }, [userList, friendsid]);
+    console.log(updateuserList);
+
+
+
+
+
 
     return (
+        // <GroupCard cardtitle='User Lists'>
+        //     {
+        //         userList.map((item, index) => (
+        //             <div key={index} className="usermainbox">
+        //                 <div className="useritem">
+        //                     <div className="userimagebox">
+        //                         <Image source={item.profileImg} alt='Image' />
+        //                     </div>
+        //                     <div className="userinfobox">
+        //                         <div>
+        //                             <h3>{item.name}</h3>
+        //                             <p>{item.email}</p>
+        //                         </div>
+        //                         {
+        //                             friendRequest.includes(item.id + data.uid)
+        //                                 ?
+        //                                 <button onClick={() => handleCancelRequest(item)} className='userbutton'>
+        //                                     cancel
+        //                                 </button>
+        //                                 :
+        //                                 friendRequest.includes(data.uid + item.id) ?
+        //                                     <button className='userbutton'>
+        //                                         Pending
+        //                                     </button>
+        //                                     :
+        //                                     <button onClick={() => handleFriendRequest(item)} className='userbutton'>
+        //                                         <FaUserPlus />
+        //                                     </button>
+        //                         }
+
+
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         ))
+        //     }
+        // </GroupCard>
         <GroupCard cardtitle='User Lists'>
             {
-                userList.map((item, index) => (
+                updateuserList.map((item, index) => (
                     <div key={index} className="usermainbox">
                         <div className="useritem">
                             <div className="userimagebox">

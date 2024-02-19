@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, remove, push, set } from "firebase/database";
 import { useSelector } from 'react-redux'
+import { MdDelete } from "react-icons/md";
+import { FaCheckCircle } from "react-icons/fa";
 
 
 
@@ -15,6 +17,8 @@ const FriendRequest = () => {
     // console.log(userdata);
 
 
+
+    // friend request data shown on the list
     useEffect(() => {
         const friendrequestRef = ref(db, 'friendrequest/');
         onValue(friendrequestRef, (snapshot) => {
@@ -23,7 +27,7 @@ const FriendRequest = () => {
             let arr = []
             snapshot.forEach((item) => {
                 if (item.val().whoreceivedid == userdata.uid) {
-                    arr.push(item.val())
+                    arr.push({ ...item.val(), id: item.key })
                 }
                 // console.log(item.val());
                 // console.log(userdata.uid);
@@ -34,7 +38,22 @@ const FriendRequest = () => {
         });
     }, [])
 
-    // console.log(requestList.length);
+
+    // friend request data delete from the list
+    let handleReject = (id) => {
+        remove(ref(db, "friendrequest/" + id))
+    }
+    // friend request accept data sent to a collection on firebase
+    let handleAccept = (item) => {
+        // console.log(item);
+        set(push(ref(db, 'friends/')), {
+            ...item,
+        }).then(() => {
+            remove(ref(db, "friendrequest/" + item.id))
+        })
+    }
+
+
 
     return (
         <GroupCard cardtitle='Friend Request'>
@@ -51,15 +70,16 @@ const FriendRequest = () => {
                                         <h3>{item.whosendname}</h3>
                                         <p>{item.whosendemail}</p>
                                     </div>
-                                    <button>
-                                        Accept
-                                    </button>
+                                    <div className='btn_grp'>
+                                        <button onClick={() => handleAccept(item)}><FaCheckCircle title='Accept' /></button>
+                                        <button onClick={() => handleReject(item.id)}><MdDelete title='reject' /></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     ))
             }
-        </GroupCard>
+        </GroupCard >
     )
 }
 
