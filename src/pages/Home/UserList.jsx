@@ -20,23 +20,84 @@ const UserList = () => {
     // console.log(data);
 
     // userlist from datatbase ===========================================
+    // useEffect(() => {
+    //     const usersRef = ref(db, 'users/');
+    //     onValue(usersRef, (snapshot) => {
+    //         // const data = snapshot.val();
+    //         let arr = []
+    //         snapshot.forEach(item => {
+    //             if (data.uid != item.key) {
+    //                 arr.push({ ...item.val(), id: item.key })
+    //             }
+    //         })
+    //         setUserList(arr)
+    //     });
+    //     // console.log(userList);
+    // }, [])
+
+
+    useEffect(() => {
+        const starCountRef = ref(db, 'friends/');
+        onValue(starCountRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                if (data.uid == item.val().whoreceivedid) {
+                    arr.push(item.val().whosendid);
+                } else if (data.uid == item.val().whosendid) {
+                    arr.push(item.val().whoreceivedid);
+                }
+            })
+            setFriendsId(arr)
+        });
+    }, [])
+    console.log(friendsid);
+
+
+
     useEffect(() => {
         const usersRef = ref(db, 'users/');
         onValue(usersRef, (snapshot) => {
             // const data = snapshot.val();
             let arr = []
             snapshot.forEach(item => {
-                if (data.uid != item.key) {
+                if (data.uid != item.key && !friendsid.find(el => el == item.key)) {
                     arr.push({ ...item.val(), id: item.key })
                 }
+                // console.log(item);
+                // if (!item.id.includes(friendsid)) {
+                //     arr.push(item);
+                // }
             })
             setUserList(arr)
         });
         // console.log(userList);
-    }, [])
+    }, [friendsid])
+
+    // useEffect(() => {
+    //     const usersRef = ref(db, 'users/');
+    //     onValue(usersRef, (snapshot) => {
+    //         // const data = snapshot.val();
+    //         let arr = []
+    //         snapshot.forEach(item => {
+    //             if (data.uid != item.key && !friendsid.includes(item.key)) {
+    //                 arr.push({ ...item.val(), id: item.key })
+    //             }
+    //             // console.log(item);
+    //             // if (!item.id.includes(friendsid)) {
+    //             //     arr.push(item);
+    //             // }
+
+    //         })
+    //         setUserList(arr)
+    //     });
+    //     // console.log(userList);
+    // }, [friendsid])
 
     // console.log(data);
     // send friendrequest data write to  datatbase =========================
+
+
+
     let handleFriendRequest = (item) => {
         // console.log("k click korche :", data.uid);
         // console.log("kake click korche :", item.id);
@@ -77,28 +138,7 @@ const UserList = () => {
 
 
     // already friends data shown for map the user
-    useEffect(() => {
-        const starCountRef = ref(db, 'friends/');
-        onValue(starCountRef, (snapshot) => {
-            let arr = []
-            snapshot.forEach((item) => {
-                arr.push(item.val().whoreceivedid && item.val().whosendid);
-            })
-            setFriendsId(arr)
-        });
-    }, [])
-    // console.log(friendsid);
 
-    useEffect(() => {
-        let arr = [];
-        userList.forEach((item) => {
-            if (!friendsid.includes(item.id)) {
-                arr.push(item);
-            }
-        });
-        setUpdateUserList(arr);
-    }, [userList, friendsid]);
-    console.log(updateuserList);
 
 
 
@@ -145,7 +185,7 @@ const UserList = () => {
         // </GroupCard>
         <GroupCard cardtitle='User Lists'>
             {
-                updateuserList.map((item, index) => (
+                userList.map((item, index) => (
                     <div key={index} className="usermainbox">
                         <div className="useritem">
                             <div className="userimagebox">
