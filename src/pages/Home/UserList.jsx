@@ -50,7 +50,7 @@ const UserList = () => {
             setFriendsId(arr)
         });
     }, [])
-    console.log(friendsid);
+    // console.log(friendsid);
 
 
 

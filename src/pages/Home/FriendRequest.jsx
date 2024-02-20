@@ -8,11 +8,10 @@ import { FaCheckCircle } from "react-icons/fa";
 
 
 
-
 const FriendRequest = () => {
 
-    const userdata = useSelector(state => state.loginuserdata.value)
     const db = getDatabase();
+    const userdata = useSelector(state => state.loginuserdata.value)
     let [requestList, setRequestList] = useState([])
     // console.log(userdata);
 
