@@ -4,22 +4,30 @@ import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useSelector } from 'react-redux'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-
+const notify = () => {
+    toast("Notification message!", {
+        position: "top-right",
+        autoClose: 1000, // milliseconds
+    });
+};
 
 const UserList = () => {
     let [userList, setUserList] = useState([])
     let [updateuserList, setUpdateUserList] = useState([])
     let [friendRequest, SetFriendRequest] = useState([])
 
-    let [friendsid, setFriendsId] = useState([])
-
     const db = getDatabase();
+    let [friendsid, setFriendsId] = useState([])
 
     const data = useSelector(state => state.loginuserdata.value)
     // console.log(data);
 
-    // userlist from datatbase ===========================================
+
+
+    // userlist from datatbase without map with friends ============================
     // useEffect(() => {
     //     const usersRef = ref(db, 'users/');
     //     onValue(usersRef, (snapshot) => {
@@ -35,7 +43,7 @@ const UserList = () => {
     //     // console.log(userList);
     // }, [])
 
-
+    // already friends data shown for map the user
     useEffect(() => {
         const starCountRef = ref(db, 'friends/');
         onValue(starCountRef, (snapshot) => {
@@ -53,7 +61,7 @@ const UserList = () => {
     // console.log(friendsid);
 
 
-
+    // userlist from datatbase ===========================================
     useEffect(() => {
         const usersRef = ref(db, 'users/');
         onValue(usersRef, (snapshot) => {
@@ -98,6 +106,8 @@ const UserList = () => {
 
 
 
+    // friend request send to firebase
+
     let handleFriendRequest = (item) => {
         // console.log("k click korche :", data.uid);
         // console.log("kake click korche :", item.id);
@@ -112,8 +122,9 @@ const UserList = () => {
             whoreceivedname: item.name,
             whoreceivedemail: item.email,
             whoreceivedphoto: item.profileImg,
-        });
-
+        }).then(() => {
+            toast.success("FriendRequest Sent Success");
+        })
     }
 
     // friendrequest read from datatbase for request send status handaling ====================
@@ -137,7 +148,7 @@ const UserList = () => {
     }
 
 
-    // already friends data shown for map the user
+
 
 
 
@@ -146,80 +157,48 @@ const UserList = () => {
 
 
     return (
-        // <GroupCard cardtitle='User Lists'>
-        //     {
-        //         userList.map((item, index) => (
-        //             <div key={index} className="usermainbox">
-        //                 <div className="useritem">
-        //                     <div className="userimagebox">
-        //                         <Image source={item.profileImg} alt='Image' />
-        //                     </div>
-        //                     <div className="userinfobox">
-        //                         <div>
-        //                             <h3>{item.name}</h3>
-        //                             <p>{item.email}</p>
-        //                         </div>
-        //                         {
-        //                             friendRequest.includes(item.id + data.uid)
-        //                                 ?
-        //                                 <button onClick={() => handleCancelRequest(item)} className='userbutton'>
-        //                                     cancel
-        //                                 </button>
-        //                                 :
-        //                                 friendRequest.includes(data.uid + item.id) ?
-        //                                     <button className='userbutton'>
-        //                                         Pending
-        //                                     </button>
-        //                                     :
-        //                                     <button onClick={() => handleFriendRequest(item)} className='userbutton'>
-        //                                         <FaUserPlus />
-        //                                     </button>
-        //                         }
+        <>
+            <ToastContainer position='top-right' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick
+                rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
 
-
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         ))
-        //     }
-        // </GroupCard>
-        <GroupCard cardtitle='User Lists'>
-            {
-                userList.map((item, index) => (
-                    <div key={index} className="usermainbox">
-                        <div className="useritem">
-                            <div className="userimagebox">
-                                <Image source={item.profileImg} alt='Image' />
-                            </div>
-                            <div className="userinfobox">
-                                <div>
-                                    <h3>{item.name}</h3>
-                                    <p>{item.email}</p>
+            <GroupCard cardtitle='User Lists'>
+                {
+                    userList.map((item, index) => (
+                        <div key={index} className="usermainbox">
+                            <div className="useritem">
+                                <div className="userimagebox">
+                                    <Image source={item.profileImg} alt='Image' />
                                 </div>
-                                {
-                                    friendRequest.includes(item.id + data.uid)
-                                        ?
-                                        <button onClick={() => handleCancelRequest(item)} className='userbutton'>
-                                            cancel
-                                        </button>
-                                        :
-                                        friendRequest.includes(data.uid + item.id) ?
-                                            <button className='userbutton'>
-                                                Pending
+                                <div className="userinfobox">
+                                    <div>
+                                        <h3>{item.name}</h3>
+                                        <p>{item.email}</p>
+                                    </div>
+                                    {
+                                        friendRequest.includes(item.id + data.uid)
+                                            ?
+                                            <button onClick={() => handleCancelRequest(item)} className='userbutton'>
+                                                cancel
                                             </button>
                                             :
-                                            <button onClick={() => handleFriendRequest(item)} className='userbutton'>
-                                                <FaUserPlus />
-                                            </button>
-                                }
+                                            friendRequest.includes(data.uid + item.id) ?
+                                                <button className='userbutton'>
+                                                    Pending
+                                                </button>
+                                                :
+                                                <button onClick={() => handleFriendRequest(item)} className='userbutton'>
+                                                    <FaUserPlus />
+                                                </button>
+                                    }
 
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))
-            }
-        </GroupCard>
+                    ))
+                }
+            </GroupCard>
+        </>
     )
 }
 
