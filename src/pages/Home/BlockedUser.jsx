@@ -1,24 +1,67 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
+import { getDatabase, ref, set, onValue, remove } from "firebase/database";
+import { useSelector } from 'react-redux';
+
 
 
 const BlockedUser = () => {
+
+    const db = getDatabase();
+    const userdata = useSelector(state => state.loginuserdata.value)
+    let [blockList, setBlockList] = useState([])
+
+    // console.log(userdata.uid);
+    useEffect(() => {
+        const blockuserRef = ref(db, 'block/');
+        onValue(blockuserRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                arr.push({ ...item.val(), id: item.key })
+            })
+            setBlockList(arr)
+        });
+    }, [])
+
+    // console.log(blockList);
+
     return (
         <GroupCard cardtitle='Blocked Users'>
             {
-                [0, 1, 2].map((item, index) => (
+                blockList.map((item, index) => (
                     <div key={index} className="usermainbox">
                         <div className="useritem">
                             <div className="userimagebox">
-                                <Image source="" alt='Image' />
+                                {
+                                    userdata.uid == item.blockedbyid
+                                        ?
+                                        <Image source={item.blockedphoto} alt='Image' />
+                                        :
+                                        <Image source={item.blockedbyphoto} alt='Image' />
+                                }
                             </div>
                             <div className="userinfobox">
                                 <div>
-                                    <h3>Tejeshwini C</h3>
-                                    <p>Yesterday, 6:22pm</p>
+                                    {
+                                        userdata.uid == item.blockedbyid
+                                            ?
+                                            <>
+                                                <h3>{item.blockedname}</h3>
+                                                <p>{item.blockedemail}</p>
+                                            </>
+                                            :
+                                            <>
+                                                <h3>{item.blockedbyname}</h3>
+                                                <p>{item.blockedbyemail}</p>
+                                            </>
+                                    }
+
                                 </div>
-                                <button>Unblock</button>
+                                {
+                                    userdata.uid == item.blockedbyid &&
+                                    <button>Unblock</button>
+                                }
                             </div>
                         </div>
                     </div>

@@ -15,11 +15,11 @@ const notify = () => {
 };
 
 const UserList = () => {
+    const db = getDatabase();
+
     let [userList, setUserList] = useState([])
-    let [updateuserList, setUpdateUserList] = useState([])
     let [friendRequest, SetFriendRequest] = useState([])
 
-    const db = getDatabase();
     let [friendsid, setFriendsId] = useState([])
 
     const data = useSelector(state => state.loginuserdata.value)
@@ -81,28 +81,6 @@ const UserList = () => {
         // console.log(userList);
     }, [friendsid])
 
-    // useEffect(() => {
-    //     const usersRef = ref(db, 'users/');
-    //     onValue(usersRef, (snapshot) => {
-    //         // const data = snapshot.val();
-    //         let arr = []
-    //         snapshot.forEach(item => {
-    //             if (data.uid != item.key && !friendsid.includes(item.key)) {
-    //                 arr.push({ ...item.val(), id: item.key })
-    //             }
-    //             // console.log(item);
-    //             // if (!item.id.includes(friendsid)) {
-    //             //     arr.push(item);
-    //             // }
-
-    //         })
-    //         setUserList(arr)
-    //     });
-    //     // console.log(userList);
-    // }, [friendsid])
-
-    // console.log(data);
-    // send friendrequest data write to  datatbase =========================
 
 
 

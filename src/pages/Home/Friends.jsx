@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
-import { getDatabase, ref, onValue, remove } from "firebase/database";
+import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 import { useSelector } from 'react-redux';
 import { MdBlock } from "react-icons/md";
 import { TbFriendsOff } from "react-icons/tb";
@@ -56,6 +56,45 @@ const Friends = () => {
 
 
 
+    let handleBlock = (item) => {
+        // console.log(item, userdata.uid);
+        // console.log('block clicked');
+        // console.log(item.id);
+        if (userdata.uid == item.whosendid) {
+            set(ref(db, 'block/' + item.id), {
+                blockedbyid: item.whosendid,
+                blockedbyname: item.whosendname,
+                blockedbyemail: item.whosendemail,
+                blockedbyphoto: item.whosendphoto,
+                blockedid: item.whoreceivedid,
+                blockedname: item.whoreceivedname,
+                blockedemail: item.whoreceivedemail,
+                blockedphoto: item.whoreceivedphoto,
+            }).then(() => {
+                remove(ref(db, "friends/" + item.id)).then(() => {
+                    toast.success("Blocked Success");
+                })
+            })
+        } else {
+            set(ref(db, 'block/' + item.id), {
+                blockedbyid: item.whoreceivedid,
+                blockedbyname: item.whoreceivedname,
+                blockedbyemail: item.whoreceivedemail,
+                blockedbyphoto: item.whoreceivedphoto,
+                blockedid: item.whosendid,
+                blockedname: item.whosendname,
+                blockedemail: item.whosendemail,
+                blockedphoto: item.whosendphoto,
+            }).then(() => {
+                remove(ref(db, "friends/" + item.id)).then(() => {
+                    toast.success("Blocked Success");
+                })
+            })
+        }
+    }
+
+
+
 
     return (
         <>
@@ -88,7 +127,7 @@ const Friends = () => {
 
                                     </div>
                                     <span>
-                                        <Button title='block user' size="small" color="error">
+                                        <Button onClick={(() => handleBlock(item))} title='block user' size="small" color="error">
                                             <MdBlock />
                                         </Button>
                                         <button onClick={() => handleUnfriend(item)} title='unfriend'><TbFriendsOff /></button>
