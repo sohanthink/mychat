@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
-import { getDatabase, ref, set, onValue, remove } from "firebase/database";
+import { getDatabase, ref, set, onValue, remove, push } from "firebase/database";
 import { useSelector } from 'react-redux';
 import { MdBlock } from "react-icons/md";
 import { TbFriendsOff } from "react-icons/tb";
@@ -61,7 +61,7 @@ const Friends = () => {
         // console.log('block clicked');
         // console.log(item.id);
         if (userdata.uid == item.whosendid) {
-            set(ref(db, 'block/' + item.id), {
+            set(push(ref(db, 'block/')), {
                 blockedbyid: item.whosendid,
                 blockedbyname: item.whosendname,
                 blockedbyemail: item.whosendemail,
@@ -76,7 +76,7 @@ const Friends = () => {
                 })
             })
         } else {
-            set(ref(db, 'block/' + item.id), {
+            set(push(ref(db, 'block/')), {
                 blockedbyid: item.whoreceivedid,
                 blockedbyname: item.whoreceivedname,
                 blockedbyemail: item.whoreceivedemail,

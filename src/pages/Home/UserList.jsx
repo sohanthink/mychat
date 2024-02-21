@@ -21,6 +21,8 @@ const UserList = () => {
     let [friendRequest, SetFriendRequest] = useState([])
 
     let [friendsid, setFriendsId] = useState([])
+    let [blockid, setblockid] = useState([])
+
 
     const data = useSelector(state => state.loginuserdata.value)
     // console.log(data);
@@ -61,6 +63,27 @@ const UserList = () => {
     // console.log(friendsid);
 
 
+    // blocked id shown for map the user
+    useEffect(() => {
+        const blockRef = ref(db, 'block/');
+        onValue(blockRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                // console.log(item.val().blockedid);
+                // console.log(item.val().blockedbyid);
+                if (data.uid == item.val().blockedid) {
+                    arr.push(item.val().blockedbyid);
+                } else if (data.uid == item.val().blockedbyid) {
+                    arr.push(item.val().blockedid);
+                }
+            })
+            setblockid(arr)
+        });
+    }, [])
+
+    // console.log(blockid);
+
+
     // userlist from datatbase ===========================================
     useEffect(() => {
         const usersRef = ref(db, 'users/');
@@ -68,7 +91,7 @@ const UserList = () => {
             // const data = snapshot.val();
             let arr = []
             snapshot.forEach(item => {
-                if (data.uid != item.key && !friendsid.find(el => el == item.key)) {
+                if (data.uid != item.key && !friendsid.find(el => el == item.key) && !blockid.find(el => el == item.key)) {
                     arr.push({ ...item.val(), id: item.key })
                 }
                 // console.log(item);
@@ -79,9 +102,7 @@ const UserList = () => {
             setUserList(arr)
         });
         // console.log(userList);
-    }, [friendsid])
-
-
+    }, [friendsid, blockid])
 
 
     // friend request send to firebase
