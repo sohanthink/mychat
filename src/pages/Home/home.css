@@ -5,8 +5,29 @@
   overflow-y: scroll;
   height: 45vh;
 }
+
+/* three dots and modal css here */
 .groupcard .dot_info {
   position: relative;
+}
+.create_grp {
+  text-align: center;
+}
+.create_grp .info {
+  display: flex;
+  flex-direction: column;
+}
+.create_grp .info .modal_btn {
+  display: flex;
+  gap: 10px;
+}
+.create_grp h2 {
+  font-size: 30px;
+  padding-bottom: 30px;
+}
+.create_grp .info button {
+  width: 30%;
+  margin-top: 15px;
 }
 .dots {
   cursor: pointer;
@@ -31,6 +52,7 @@
   padding: 8px;
   cursor: pointer;
 }
+
 .groupcard .group_heading {
   display: flex;
   justify-content: center;
