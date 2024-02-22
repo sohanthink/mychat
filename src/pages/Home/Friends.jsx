@@ -55,7 +55,7 @@ const Friends = () => {
     }
 
 
-
+    // block data from firebase
     let handleBlock = (item) => {
         // console.log(item, userdata.uid);
         // console.log('block clicked');

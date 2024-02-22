@@ -18,7 +18,10 @@ const BlockedUser = () => {
         onValue(blockuserRef, (snapshot) => {
             let arr = []
             snapshot.forEach((item) => {
-                arr.push({ ...item.val(), id: item.key })
+                if (userdata.uid == item.val().blockedbyid || userdata.uid == item.val().blockedid) {
+                    arr.push({ ...item.val(), id: item.key })
+                }
+                // arr.push({ ...item.val(), id: item.key })
             })
             setBlockList(arr)
         });
