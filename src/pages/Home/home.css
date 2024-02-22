@@ -80,6 +80,7 @@
   width: 70px;
   background: red;
   border-radius: 50%;
+  overflow: hidden;
 }
 .usermainbox .useritem .userimagebox img {
   width: 100%;

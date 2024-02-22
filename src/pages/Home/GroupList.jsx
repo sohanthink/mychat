@@ -1,17 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { getDatabase, ref, set, push } from "firebase/database";
+import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { useSelector } from 'react-redux';
 import { Snackbar, Alert } from '@mui/material';
-
-
-
-
 
 
 const style = {
@@ -49,6 +45,7 @@ const GroupList = () => {
     const userdata = useSelector(state => state.loginuserdata.value)
     // console.log(userdata.uid);
 
+    let [group, setGroup] = useState([])
 
     // modal open
     const handleOpen = () => {
@@ -92,9 +89,6 @@ const GroupList = () => {
         })
     }
 
-
-
-
     // alert close logic
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') {
@@ -102,6 +96,21 @@ const GroupList = () => {
         }
         setOpenAlert(false);
     };
+
+
+
+    useEffect(() => {
+        const groupRef = ref(db, 'groups/');
+        onValue(groupRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                userdata.uid != item.val().adminid &&
+                    arr.push(item.val());
+            })
+            setGroup(arr)
+        })
+        // console.log(group);
+    }, [])
 
 
 
@@ -138,17 +147,17 @@ const GroupList = () => {
                         </Box>
                     </Modal>
                 </div>
-                {
-                    [0, 1, 2, 3, 4, 5, 6].map((item, index) => (
+                {group.length == 0 ? <p><b><i>No Public Groups found</i></b></p> :
+                    group.map((item, index) => (
                         <div key={index} className="usermainbox">
                             <div className="useritem">
                                 <div className="userimagebox">
-                                    <Image source="" alt='Image' />
+                                    <Image source="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a3429ccc-21eb-4b69-a59f-162ed8342734/dftdrcx-d43e7da2-b165-44eb-a263-b9d6b1d56bd3.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2EzNDI5Y2NjLTIxZWItNGI2OS1hNTlmLTE2MmVkODM0MjczNFwvZGZ0ZHJjeC1kNDNlN2RhMi1iMTY1LTQ0ZWItYTI2My1iOWQ2YjFkNTZiZDMuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.UOelmC8JCvk5rGVZqXzOKX1b8LCsy3MeQ5iIQ9ITbiw" alt='Image' />
                                 </div>
                                 <div className="userinfobox">
                                     <div>
-                                        <h3>name</h3>
-                                        <p>mern stack developer</p>
+                                        <h3>{item.groupname}</h3>
+                                        <p>{item.grouptagname}</p>
                                     </div>
                                     <button>
                                         Join
