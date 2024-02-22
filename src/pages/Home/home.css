@@ -5,7 +5,32 @@
   overflow-y: scroll;
   height: 45vh;
 }
-
+.groupcard .dot_info {
+  position: relative;
+}
+.dots {
+  cursor: pointer;
+}
+.groupcard .dot_info.active ul {
+  display: block;
+}
+.groupcard .dot_info ul {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #e0e0e0;
+  padding: 10px;
+  color: rgb(0, 0, 0);
+  display: none;
+  border-radius: 5px;
+  font-weight: 300;
+}
+.groupcard .dot_info ul li {
+  margin: 2px 0;
+  background: #fae6e6;
+  padding: 8px;
+  cursor: pointer;
+}
 .groupcard .group_heading {
   display: flex;
   justify-content: center;

@@ -102,40 +102,41 @@ const Friends = () => {
                 rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
             <GroupCard cardtitle='Friends'>
                 {
-                    friends.map((item, index) => (
-                        <div key={index} className="usermainbox">
-                            <div className="useritem">
-                                <div className="userimagebox">
-                                    <Image source={item.whoreceivedphoto} alt='Image' />
-                                </div>
-                                <div className="userinfobox">
-                                    <div>
-                                        {
-                                            userdata.uid == item.whoreceivedid
-                                                ?
-                                                <>
-                                                    <h3>{item.whosendname}</h3>
-                                                    <p>{item.whosendemail}</p>
-                                                </>
-                                                :
-                                                <>
-                                                    <h3>{item.whoreceivedname}</h3>
-                                                    <p>{item.whoreceivedemail}</p>
-                                                </>
-                                        }
-
-
+                    friends.length == 0 ? <p><b><i>Gorib. kono bondhu nai!</i></b></p> :
+                        friends.map((item, index) => (
+                            <div key={index} className="usermainbox">
+                                <div className="useritem">
+                                    <div className="userimagebox">
+                                        <Image source={item.whoreceivedphoto} alt='Image' />
                                     </div>
-                                    <span>
-                                        <Button onClick={(() => handleBlock(item))} title='block user' size="small" color="error">
-                                            <MdBlock />
-                                        </Button>
-                                        <button onClick={() => handleUnfriend(item)} title='unfriend'><TbFriendsOff /></button>
-                                    </span>
+                                    <div className="userinfobox">
+                                        <div>
+                                            {
+                                                userdata.uid == item.whoreceivedid
+                                                    ?
+                                                    <>
+                                                        <h3>{item.whosendname}</h3>
+                                                        <p>{item.whosendemail}</p>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <h3>{item.whoreceivedname}</h3>
+                                                        <p>{item.whoreceivedemail}</p>
+                                                    </>
+                                            }
+
+
+                                        </div>
+                                        <span>
+                                            <Button onClick={(() => handleBlock(item))} title='block user' size="small" color="error">
+                                                <MdBlock />
+                                            </Button>
+                                            <button onClick={() => handleUnfriend(item)} title='unfriend'><TbFriendsOff /></button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        ))
                 }
             </GroupCard>
         </>

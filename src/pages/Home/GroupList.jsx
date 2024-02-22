@@ -1,12 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
 
 
 
 const GroupList = () => {
+
+    let [dotInfoActive, setDotInfoActive] = useState(false)
+
+
+    let handleDotClick = () => {
+        setDotInfoActive(!dotInfoActive)
+    }
+
+
+
+
     return (
-        <GroupCard cardtitle='Groups Lists'>
+        <GroupCard cardtitle='Groups Lists' handleDotClick={handleDotClick}>
+            <div className={`dot_info ${dotInfoActive ? 'active' : ''}`}>
+                <ul>
+                    <li>Create a Group</li>
+                </ul>
+            </div>
             {
                 [0, 1, 2, 3, 4, 5, 6].map((item, index) => (
                     <div key={index} className="usermainbox">

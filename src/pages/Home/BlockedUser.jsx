@@ -3,8 +3,16 @@ import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
 import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 import { useSelector } from 'react-redux';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
+const notify = () => {
+    toast("Notification message!", {
+        position: "top-right",
+        autoClose: 1000, // milliseconds
+    });
+};
 
 const BlockedUser = () => {
 
@@ -29,9 +37,19 @@ const BlockedUser = () => {
 
     // console.log(blockList);
 
+
+    // unblock a blocked user
+    let handleUnblock = (item) => {
+        remove(ref(db, "block/" + item.id)).then(() => {
+            toast.success("Unblocked Successful");
+        })
+    }
+
     return (
         <GroupCard cardtitle='Blocked Users'>
-            {
+            <ToastContainer position='top-right' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick
+                rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
+            {blockList.length == 0 ? <p><b><i>No Blocked user Found</i></b></p> :
                 blockList.map((item, index) => (
                     <div key={index} className="usermainbox">
                         <div className="useritem">
@@ -63,7 +81,7 @@ const BlockedUser = () => {
                                 </div>
                                 {
                                     userdata.uid == item.blockedbyid &&
-                                    <button>Unblock</button>
+                                    <button onClick={() => handleUnblock(item)}>Unblock</button>
                                 }
                             </div>
                         </div>

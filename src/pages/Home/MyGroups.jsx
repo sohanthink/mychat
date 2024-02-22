@@ -5,8 +5,16 @@ import Image from '../../utilities/Image/Image'
 
 
 const MyGroups = () => {
+
+
+    // let handleDotsClick = () => {
+    //     console.log('dots clicked');
+    // }
+
+
     return (
-        <GroupCard cardtitle='My Groups'>
+        <GroupCard cardtitle='My Groups' dotname='more'>
+
             {
                 [0, 1, 2, 3, 4, 5, 6].map((item, index) => (
                     <div key={index} className="usermainbox">
