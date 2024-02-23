@@ -46,6 +46,7 @@ const GroupList = () => {
     // console.log(userdata.uid);
 
     let [group, setGroup] = useState([])
+    let [groupRequest, setGroupRequest] = useState([])
 
     // modal open
     const handleOpen = () => {
@@ -69,7 +70,7 @@ const GroupList = () => {
         })
     }
 
-    // group create data to the database 
+    // my group create data to the database 
     let handleGrpsubmit = () => {
         // console.log(groupInfo);
         set(push(ref(db, 'groups/')), {
@@ -99,17 +100,52 @@ const GroupList = () => {
 
 
 
+    // all the public groups shown to the frontend
     useEffect(() => {
         const groupRef = ref(db, 'groups/');
         onValue(groupRef, (snapshot) => {
             let arr = []
             snapshot.forEach((item) => {
                 userdata.uid != item.val().adminid &&
-                    arr.push(item.val());
+                    arr.push({ ...item.val(), id: item.key });
             })
             setGroup(arr)
         })
         // console.log(group);
+    }, [])
+
+
+    // my group join request data to the database 
+    let handleGroupJoinRequest = (item) => {
+        set(push(ref(db, 'grouprequest/')), {
+            groupid: item.id,
+            groupname: item.groupname,
+            grouptagname: item.grouptagname,
+            adminid: item.adminid,
+            adminname: item.adminname,
+            userid: userdata.uid,
+            username: userdata.displayName,
+            userprofile: userdata.photoURL,
+        }).then(() => {
+            setAlertMessage('Group join request sent');
+        })
+    }
+
+    // check active user sent a group request or not? by matching id to show pending button
+    useEffect(() => {
+        const grouprequestRef = ref(db, 'grouprequest/');
+        onValue(grouprequestRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                // console.log(item.val().userid);
+                // console.log(userdata.uid);
+                userdata.uid == item.val().userid &&
+                    arr.push(item.val().groupid);
+            })
+            // console.log(arr.userid);
+            setGroupRequest(arr)
+        })
+        // console.log(groupRequest);
     }, [])
 
 
@@ -159,9 +195,13 @@ const GroupList = () => {
                                         <h3>{item.groupname}</h3>
                                         <p>{item.grouptagname}</p>
                                     </div>
-                                    <button>
-                                        Join
-                                    </button>
+                                    {
+                                        groupRequest.indexOf(item.id) !== -1 ?
+                                            <button> pending </button>
+                                            :
+                                            <button onClick={() => handleGroupJoinRequest(item)}> Join </button>
+                                    }
+                                    {/* <button onClick={() => handleGroupJoinRequest(item)}> Join </button> */}
                                 </div>
                             </div>
                         </div>
