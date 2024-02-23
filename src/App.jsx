@@ -8,6 +8,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import RootLayout from "./components/commonlayout/RootLayout";
 import Home from "./pages/Home/Home";
+import Feed from "./pages/feed/Feed";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/message" ></Route>
           <Route path="/notification"></Route>
           <Route path="/setting" ></Route>
+          <Route path="/feed" element={<Feed />} ></Route>
         </Route>
       </>
     )

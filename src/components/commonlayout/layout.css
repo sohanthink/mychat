@@ -39,13 +39,13 @@
 .sidebarBox .navigation {
   display: flex;
   flex-direction: column;
-  row-gap: 70px;
+  row-gap: 60px;
 }
 
 .sidebarBox .navigation li a {
   color: white;
   background-color: rgba(255, 255, 255, 0);
-  padding: 50px 30px 30px 30px;
+  padding: 30px 30px 22px 30px;
 }
 
 .sidebarBox .navigation li a.active {
@@ -55,7 +55,7 @@
 }
 
 .sidebarBox .navigation li a svg {
-  font-size: 40px;
+  font-size: 27px;
 }
 
 .sidebarBox .logout svg {

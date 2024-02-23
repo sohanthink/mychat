@@ -3,6 +3,10 @@ import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { useSelector } from 'react-redux';
+import Badge from '@mui/material/Badge';
+import { HiOutlineUserGroup } from "react-icons/hi";
+import Tooltip from '@mui/material/Tooltip';
+
 
 
 const MyGroups = () => {
@@ -41,7 +45,16 @@ const MyGroups = () => {
                                     <p>{item.grouptagname}</p>
                                 </div>
                                 <span>
-                                    Today, 8:56pm
+                                    <Tooltip title="All Pending Request" arrow>
+                                        <Badge badgeContent={4} color="success">
+                                            <div className="circle_btn"><HiOutlineUserGroup /></div>
+                                        </Badge>
+                                    </Tooltip>
+                                    <Tooltip title="All Members" arrow>
+                                        <Badge badgeContent={4} color="success">
+                                            <div className="circle_btn"><HiOutlineUserGroup /></div>
+                                        </Badge>
+                                    </Tooltip>
                                 </span>
                             </div>
                         </div>

@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from "firebase/auth";
 import { useSelector, useDispatch } from 'react-redux'
 import { loginuser } from '../../slices/userSlice';
+import { ImFeed } from "react-icons/im";
+
 
 
 const notify = () => {
@@ -69,6 +71,11 @@ const Sidebar = () => {
                 </div>
                 <div>
                     <ul className='navigation'>
+                        <li>
+                            <NavLink to='/feed'>
+                                <ImFeed />
+                            </NavLink>
+                        </li>
                         <li>
                             <NavLink to='/home'>
                                 <FiHome />
