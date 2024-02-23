@@ -126,6 +126,7 @@ const GroupList = () => {
             userid: userdata.uid,
             username: userdata.displayName,
             userprofile: userdata.photoURL,
+            useremail: userdata.email,
         }).then(() => {
             setAlertMessage('Group join request sent');
         })
@@ -193,6 +194,7 @@ const GroupList = () => {
                                 <div className="userinfobox">
                                     <div>
                                         <h3>{item.groupname}</h3>
+                                        <p>{item.adminname}</p>
                                         <p>{item.grouptagname}</p>
                                     </div>
                                     {
