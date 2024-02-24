@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import GroupCard from '../../components/home/GroupCard'
 import Image from '../../utilities/Image/Image'
-import { getDatabase, ref, set, push, onValue } from "firebase/database";
+import { getDatabase, ref, set, push, onValue, remove } from "firebase/database";
 import { useDispatch, useSelector } from 'react-redux';
 import Badge from '@mui/material/Badge';
 import { HiOutlineUserGroup } from "react-icons/hi";
@@ -16,6 +16,9 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import { IoMdCheckmarkCircleOutline, IoIosRemoveCircle } from "react-icons/io";
+
+
 
 const style = {
     position: 'absolute',
@@ -24,7 +27,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: '0.5px solid #000',
     boxShadow: 24,
     p: 4,
 };
@@ -69,7 +72,7 @@ const MyGroups = () => {
             let arr = []
             snapshot.forEach((item) => {
                 userdata.uid == item.val().adminid && item.val().groupid == groupid.mygrpid &&
-                    arr.push(item.val());
+                    arr.push({ ...item.val(), groupreqid: item.key });
             })
             // dispatch(groupRequest.length)
             setgroupRequest(arr)
@@ -77,6 +80,22 @@ const MyGroups = () => {
         setOpen(true);
     }
 
+
+
+    // reject member to my group join request
+    let handlegroupreqdelete = (item) => {
+        remove(ref(db, "grouprequest/" + item.groupreqid))
+    }
+
+
+    // accept member to my group join request
+    let handleGroupMemberAccept = (item) => {
+        set(push(ref(db, 'groupmembers/')), {
+            ...item
+        }).then(() => {
+            remove(ref(db, "grouprequest/" + item.groupreqid))
+        })
+    }
 
 
 
@@ -146,7 +165,7 @@ const MyGroups = () => {
                             {
                                 groupRequest.map((item, index) => (
                                     <>
-                                        <ListItem key={index} alignItems="flex-start">
+                                        <ListItem key={index} alignItems="center" display="flex" justifyContent="center">
                                             <ListItemAvatar>
                                                 <Avatar alt="Remy Sharp" src={item.userprofile} />
                                             </ListItemAvatar>
@@ -158,9 +177,15 @@ const MyGroups = () => {
                                                     </React.Fragment>
                                                 }
                                             />
-                                            <div>
-                                                <button>Add</button>
-                                                <button>Reject</button>
+                                            <div className='modal_btn'>
+                                                <Tooltip title="Add" arrow>
+                                                    <div onClick={() => { handleGroupMemberAccept(item) }} className="circle_btn"><IoMdCheckmarkCircleOutline />
+                                                    </div>
+                                                </Tooltip>
+                                                <Tooltip title="Reject" arrow>
+                                                    <div onClick={() => handlegroupreqdelete(item)} className="circle_btn"><IoIosRemoveCircle />
+                                                    </div>
+                                                </Tooltip>
                                             </div>
                                         </ListItem>
                                         <Divider variant="inset" component="li" />

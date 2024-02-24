@@ -134,13 +134,14 @@
   display: flex;
   gap: 5px;
 }
-.usermainbox .useritem .userinfobox span .circle_btn svg {
+.circle_btn svg {
   color: white;
   height: 17px;
   width: 17px;
   background: #5f35f5;
-  padding: 15px;
+  padding: 10px;
   border-radius: 50%;
+  cursor: pointer;
 }
 .usermainbox .useritem .userinfobox button.userbutton {
   padding: 11px;
@@ -148,4 +149,9 @@
   font-size: 15px;
   line-height: 20px;
   cursor: pointer;
+}
+
+.modal_btn {
+  display: flex;
+  gap: 5px;
 }
