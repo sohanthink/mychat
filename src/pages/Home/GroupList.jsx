@@ -47,6 +47,7 @@ const GroupList = () => {
 
     let [group, setGroup] = useState([])
     let [groupRequest, setGroupRequest] = useState([])
+    let [groupMember, setGroupMember] = useState([])
 
     // modal open
     const handleOpen = () => {
@@ -150,6 +151,24 @@ const GroupList = () => {
     }, [])
 
 
+    // check active user is ina group member or not? by matching id to show joined status
+    useEffect(() => {
+        const groupmembersRef = ref(db, 'groupmembers/');
+        onValue(groupmembersRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                // console.log(item.val().userid);
+                // console.log(userdata.uid);
+                userdata.uid == item.val().userid &&
+                    arr.push(item.val().groupid);
+            })
+            // console.log(arr.userid);
+            setGroupMember(arr)
+        })
+        // console.log(groupMember);
+    }, [])
+
+
 
     return (
         <>
@@ -198,10 +217,21 @@ const GroupList = () => {
                                         <p>{item.grouptagname}</p>
                                     </div>
                                     {
-                                        groupRequest.indexOf(item.id) !== -1 ?
-                                            <button> pending </button>
+                                        groupMember.indexOf(item.id) !== -1 ?
+                                            <button> joined </button>
                                             :
-                                            <button onClick={() => handleGroupJoinRequest(item)}> Join </button>
+                                            groupRequest.indexOf(item.id) !== -1 ?
+                                                <button> pending </button>
+                                                :
+                                                <button onClick={() => handleGroupJoinRequest(item)}> Join </button>
+
+                                        // groupRequest.indexOf(item.id) !== -1 ?
+                                        //     groupMember.indexOf(item.id) !== -1 ?
+                                        //         <button> joined </button>
+                                        //         :
+                                        //         <button> pending </button>
+                                        //     :
+                                        //     <button onClick={() => handleGroupJoinRequest(item)}> Join </button>
                                     }
                                     {/* <button onClick={() => handleGroupJoinRequest(item)}> Join </button> */}
                                 </div>

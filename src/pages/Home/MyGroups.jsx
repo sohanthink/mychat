@@ -88,7 +88,7 @@ const MyGroups = () => {
     }
 
 
-    // accept member to my group join request
+    // accept member to my group join request and send them to groupmembers collection
     let handleGroupMemberAccept = (item) => {
         set(push(ref(db, 'groupmembers/')), {
             ...item
