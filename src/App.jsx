@@ -9,6 +9,7 @@ import Register from "./pages/register/Register";
 import RootLayout from "./components/commonlayout/RootLayout";
 import Home from "./pages/Home/Home";
 import Feed from "./pages/feed/Feed";
+import Message from "./pages/message/Message";
 
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
 
         <Route element={<RootLayout />}>
           <Route path="/home" element={<Home />}></Route>
-          <Route path="/message" ></Route>
+          <Route path="/message" element={<Message />} ></Route>
           <Route path="/notification"></Route>
           <Route path="/setting" ></Route>
           <Route path="/feed" element={<Feed />} ></Route>
