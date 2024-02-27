@@ -17,7 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { IoMdCheckmarkCircleOutline, IoIosRemoveCircle } from "react-icons/io";
-
+import { HiOutlineClock } from "react-icons/hi";
 
 
 const style = {
@@ -37,16 +37,22 @@ const MyGroups = () => {
     const db = getDatabase();
     const userdata = useSelector(state => state.loginuserdata.value)
 
+    // State for my groups
+    const [myGroup, setMyGroup] = useState([]);
 
-    let [myGroup, setMyGroup] = useState([])
-    let [groupRequest, setgroupRequest] = useState([])
-    let [groupName, setGroupName] = useState("")
-    let [groupReqBadge, setGroupReqBadge] = useState("")
+    // State for group join requests
+    const [groupRequest, setgroupRequest] = useState([]);
+    const [groupName, setGroupName] = useState("");
+    const [groupReqBadge, setGroupReqBadge] = useState("");
 
+    // State for my group members
+    const [myGroupMember, setMyGroupMember] = useState([]);
 
-    //  pending request modal things
-    const [open, setOpen] = React.useState(false);
-    const handleClose = () => setOpen(false);
+    // State for the pending request modal
+    const [openRequestModal, setOpenRequestModal] = React.useState(false);
+
+    // State for the group members modal
+    const [openMembersModal, setOpenMembersModal] = React.useState(false);
 
     // all hte group i have created
     useEffect(() => {
@@ -59,13 +65,13 @@ const MyGroups = () => {
             })
             setMyGroup(arr)
         })
-        // console.log(group);
+        // console.log(myGroup);
     }, [])
 
     // console.log(myGroup);
 
     // all the group join request data from collection db firebase
-    const handleOpen = (groupid) => {
+    const handleGroupJoinReq = (groupid) => {
         setGroupName(groupid.groupname)
         const groupRequestRef = ref(db, 'grouprequest/');
         onValue(groupRequestRef, (snapshot) => {
@@ -77,7 +83,7 @@ const MyGroups = () => {
             // dispatch(groupRequest.length)
             setgroupRequest(arr)
         })
-        setOpen(true);
+        setOpenRequestModal(true);
     }
 
 
@@ -116,6 +122,28 @@ const MyGroups = () => {
 
 
 
+    let handleMember = (clickedGrpId) => {
+        // console.log('clicked member');
+        // console.log(clickedGrpId);
+        const groupMembersRef = ref(db, 'groupmembers/');
+        onValue(groupMembersRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                // console.log(item.val());
+                userdata.uid == item.val().adminid && item.val().groupid == clickedGrpId.mygrpid &&
+                    arr.push({
+                        email: item.val().useremail,
+                        username: item.val().username,
+                        userphoto: item.val().userprofile,
+                    });
+            })
+            setMyGroupMember(arr)
+        })
+        setOpenMembersModal(true);
+        console.log(myGroupMember);
+    }
+
+
 
     return (
         <>
@@ -135,13 +163,16 @@ const MyGroups = () => {
                                     </div>
                                     <span>
                                         <Tooltip title="All Pending Request" arrow>
-                                            <Badge badgeContent={6} color="success">
-                                                <div onClick={() => handleOpen(item)} className="circle_btn"><HiOutlineUserGroup /></div>
+                                            {/* <Badge badgeContent={6} color="success">
+                                                <div onClick={() => handleGroupJoinReq(item)} className="circle_btn"><HiOutlineUserGroup /></div>
+                                            </Badge> */}
+                                            <Badge color="success">
+                                                <div onClick={() => handleGroupJoinReq(item)} className="circle_btn"><HiOutlineClock /></div>
                                             </Badge>
                                         </Tooltip>
                                         <Tooltip title="All Members" arrow>
-                                            <Badge badgeContent={4} color="success">
-                                                <div className="circle_btn"><HiOutlineUserGroup /></div>
+                                            <Badge color="success">
+                                                <div onClick={() => handleMember(item)} className="circle_btn"><HiOutlineUserGroup /></div>
                                             </Badge>
                                         </Tooltip>
                                     </span>
@@ -154,7 +185,7 @@ const MyGroups = () => {
 
             {/* all the group join > pending request */}
 
-            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+            <Modal open={openRequestModal} onClose={() => setOpenRequestModal(false)} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
                 <Box sx={style}>
                     <div>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -185,6 +216,52 @@ const MyGroups = () => {
                                                 <Tooltip title="Reject" arrow>
                                                     <div onClick={() => handlegroupreqdelete(item)} className="circle_btn"><IoIosRemoveCircle />
                                                     </div>
+                                                </Tooltip>
+                                            </div>
+                                        </ListItem>
+                                        <Divider variant="inset" component="li" />
+                                    </>
+                                ))
+                            }
+                        </List>
+                    </div>
+                </Box>
+            </Modal>
+
+            {/*my group members lists*/}
+
+            <Modal open={openMembersModal} onClose={() => setOpenMembersModal(false)} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+                <Box sx={style}>
+                    <div>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            <b><i></i></b> All Members list :
+                        </Typography>
+                        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+
+                            {
+                                myGroupMember.map((item, index) => (
+
+                                    <>
+                                        <ListItem key={index} alignItems="center" display="flex" justifyContent="center">
+                                            <ListItemAvatar>
+                                                <Avatar alt="Remy Sharp" src={item.userphoto} />
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={item.username}
+                                                secondary={
+                                                    <React.Fragment>
+                                                        {item.email}
+                                                    </React.Fragment>
+                                                }
+                                            />
+                                            <div className='modal_btn'>
+                                                <Tooltip title="Add" arrow>
+                                                    {/* <div onClick={() => { handleGroupMemberAccept(item) }} className="circle_btn"><IoMdCheckmarkCircleOutline />
+                                                    </div> */}
+                                                </Tooltip>
+                                                <Tooltip title="Reject" arrow>
+                                                    {/* <div onClick={() => handlegroupreqdelete(item)} className="circle_btn"><IoIosRemoveCircle />
+                                                    </div> */}
                                                 </Tooltip>
                                             </div>
                                         </ListItem>
