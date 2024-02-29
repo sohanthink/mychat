@@ -54,7 +54,7 @@ const MyGroups = () => {
     // State for the group members modal
     const [openMembersModal, setOpenMembersModal] = React.useState(false);
 
-    // all hte group i have created
+    // all the group i have created
     useEffect(() => {
         const mygroupRef = ref(db, 'groups/');
         onValue(mygroupRef, (snapshot) => {
