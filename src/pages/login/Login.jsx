@@ -126,7 +126,7 @@ const Login = () => {
             const user = userCredential.user;
             // console.log(user);
             localStorage.setItem('user', JSON.stringify(user));
-            dispatch(loginuser(userCredential.user))
+            dispatch(loginuser(user))
             navigate('/home');
           } else {
             signOut(auth).then(() => {

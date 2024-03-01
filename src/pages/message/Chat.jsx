@@ -8,6 +8,8 @@ import Image from '../../utilities/Image/Image';
 import { MdEmojiEmotions } from "react-icons/md";
 import { FaCamera } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
+import { useSelector } from 'react-redux';
+
 
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -42,6 +44,16 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 
 const Chat = () => {
+
+
+    const activechatdata = useSelector((state) => state.activeChat.value)
+    // console.log(state);
+    console.log(activechatdata);
+
+    // if (activechatdata == null) {
+    //     return
+    // }
+
     return (
         <>
             <div className="chat">
@@ -57,7 +69,11 @@ const Chat = () => {
                             </StyledBadge>
                         </div>
                         <div>
-                            <h3>swati baichod</h3>
+                            <h3>
+                                {activechatdata != null &&
+                                    activechatdata.item.friendname
+                                }
+                            </h3>
                             <h6>online</h6>
                         </div>
                     </div>
