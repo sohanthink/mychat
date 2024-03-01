@@ -63,14 +63,19 @@ const Chat = () => {
                             <StyledBadge
                                 overlap="circular"
                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
-                            >
-                                <Avatar sx={{ width: '70px', height: '70px' }} alt="Remy Sharp" src="https://cdn.vox-cdn.com/thumbor/2E78dg_Cpbdh3nv6z0KKhOhYs6c=/0x0:1100x580/1200x800/filters:focal(520x151:696x327)/cdn.vox-cdn.com/uploads/chorus_image/image/71921482/bkq6gtrpcnw43vsm5zm62q3z.0.png" />
+                                variant="dot">
+                                {
+                                    activechatdata != null ?
+                                        <Avatar sx={{ width: '70px', height: '70px' }} alt="Remy Sharp" src={activechatdata.item.friendphoto} />
+                                        :
+                                        <Avatar sx={{ width: '70px', height: '70px' }} alt="Remy Sharp" src="https://cdn.vox-cdn.com/thumbor/2E78dg_Cpbdh3nv6z0KKhOhYs6c=/0x0:1100x580/1200x800/filters:focal(520x151:696x327)/cdn.vox-cdn.com/uploads/chorus_image/image/71921482/bkq6gtrpcnw43vsm5zm62q3z.0.png" />
+                                }
                             </StyledBadge>
                         </div>
                         <div>
                             <h3>
-                                {activechatdata != null &&
+                                {
+                                    activechatdata != null &&
                                     activechatdata.item.friendname
                                 }
                             </h3>
