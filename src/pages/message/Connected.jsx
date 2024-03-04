@@ -93,10 +93,10 @@ const Connected = () => {
     // msg a single friend
     let handleFriendMsg = (item) => {
         // console.log('clicked', item);
-        // localStorage.removeItem('connectedfriend');
-        // localStorage.setItem('connectedfriend', JSON.stringify(item));
+        localStorage.removeItem('connectedfriend');
+        localStorage.setItem('connectedfriend', JSON.stringify(item));
         dispatch(chatUserInfo(item))
-        console.log(item);
+        // console.log(item);
     }
 
     // let handleFriendMsg = (item) => {
@@ -116,20 +116,20 @@ const Connected = () => {
     // }
 
     // msg to my groups
-    // let handleMygroupMsg = (item) => {
-    //     console.log('clicked', item);
-    //     localStorage.removeItem('connectedfriend');
-    //     localStorage.setItem('connectedfriend', JSON.stringify(item));
-    //     dispatch(activechat({ ...item, type: "mygroup" }))
-    // }
+    let handleMygroupMsg = (item) => {
+        console.log('clicked', item);
+        localStorage.removeItem('connectedfriend');
+        localStorage.setItem('connectedfriend', JSON.stringify(item));
+        dispatch(chatUserInfo({ ...item, type: "mygroup" }))
+    }
 
     // msg to joined group
-    // let handleJoinedGrp = (item) => {
-    //     console.log('clicked', item);
-    //     localStorage.removeItem('connectedfriend');
-    //     localStorage.setItem('connectedfriend', JSON.stringify(item));
-    //     dispatch(activechat({ ...item, type: "joined" }))
-    // }
+    let handleJoinedGrp = (item) => {
+        console.log('clicked', item);
+        localStorage.removeItem('connectedfriend');
+        localStorage.setItem('connectedfriend', JSON.stringify(item));
+        dispatch(chatUserInfo({ ...item, type: "joined" }))
+    }
 
     return (
         <>
@@ -150,8 +150,8 @@ const Connected = () => {
                                         </>
                                     </div>
                                     <span>
-                                        <Button title='block user' size="small" color="error">
-                                            <AiFillMessage onClick={() => handleFriendMsg(item)} />
+                                        <Button onClick={() => handleFriendMsg(item)} title='block user' size="small" color="error">
+                                            <AiFillMessage />
                                         </Button>
                                     </span>
                                 </div>
@@ -159,7 +159,7 @@ const Connected = () => {
                         </div>
                     ))
                 }
-                {/* {
+                {
                     myGroup.map((item, index) => (
                         <div key={index} className="usermainbox">
                             <div className="useritem">
@@ -209,7 +209,7 @@ const Connected = () => {
                             </div>
                         </div>
                     ))
-                } */}
+                }
             </GroupCard >
         </>
     )

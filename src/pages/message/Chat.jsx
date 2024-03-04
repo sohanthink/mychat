@@ -58,20 +58,20 @@ const Chat = () => {
     // }
 
 
-    // useEffect(() => {
-    //     let activeChatName = ''
-    //     if (activechatdata != null) {
-    //         if (activechatdata.friendname) {
-    //             activeChatName = activechatdata.friendname
-    //         } else if (activechatdata.type == 'mygroup') {
-    //             activeChatName = activechatdata.groupname
-    //         } else if (activechatdata.type == 'joined') {
-    //             activeChatName = activechatdata.groupname
-    //         }
-    //     }
-    //     setActiveChatNAme(activeChatName)
+    useEffect(() => {
+        let activeChatName = ''
+        if (activechatdata != null) {
+            if (activechatdata.friendname) {
+                activeChatName = activechatdata.friendname
+            } else if (activechatdata.type == 'mygroup') {
+                activeChatName = activechatdata.groupname
+            } else if (activechatdata.type == 'joined') {
+                activeChatName = activechatdata.groupname
+            }
+        }
+        setActiveChatNAme(activeChatName)
 
-    // }, [activechatdata])
+    }, [])
 
 
 
@@ -88,28 +88,28 @@ const Chat = () => {
                                 overlap="circular"
                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                 variant="dot">
-                                {/* {
+                                {
                                     activechatdata != '' ?
                                         <Avatar sx={{ width: '70px', height: '70px' }} alt="Remy Sharp" src={activechatdata.friendphoto} />
                                         :
                                         <Avatar sx={{ width: '70px', height: '70px' }} alt="Remy Sharp" src="https://cdn.vox-cdn.com/thumbor/2E78dg_Cpbdh3nv6z0KKhOhYs6c=/0x0:1100x580/1200x800/filters:focal(520x151:696x327)/cdn.vox-cdn.com/uploads/chorus_image/image/71921482/bkq6gtrpcnw43vsm5zm62q3z.0.png" />
-                                } */}
+                                }
                             </StyledBadge>
                         </div>
                         <div>
                             <h3>
-                                {/* {
+                                {
                                     activechatdata.friendname ?
                                         activechatdata.friendname
                                         :
                                         activechatdata.groupname.type == "mygroup" ?
                                             activechatdata.groupname :
                                             activechatdata.groupname
-                                } */}
-                                {
+                                }
+                                {/* {
                                     activechatdata != null &&
                                     activechatdata.friendname
-                                }
+                                } */}
 
                             </h3>
                             <h6>online</h6>
