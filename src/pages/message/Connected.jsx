@@ -5,7 +5,8 @@ import Image from '../../utilities/Image/Image'
 import { getDatabase, ref, set, onValue, remove, push } from "firebase/database";
 import { useDispatch, useSelector } from 'react-redux';
 import { AiFillMessage } from "react-icons/ai";
-import { activechat } from '../../slices/activechat/activechatSlice';
+import { chatUserInfo } from '../../slices/activechat/activechatSlice';
+
 
 
 const Connected = () => {
@@ -21,6 +22,7 @@ const Connected = () => {
     let [friends, setFriends] = useState([])
     let [myGroup, setMyGroup] = useState([])
     let [joinedGroup, setJoinedGroup] = useState([])
+    console.log(friends);
 
     // my friends data from firebase
     useEffect(() => {
@@ -93,8 +95,41 @@ const Connected = () => {
         // console.log('clicked', item);
         // localStorage.removeItem('connectedfriend');
         // localStorage.setItem('connectedfriend', JSON.stringify(item));
-        dispatch(activechat({ item, type: "single" }))
+        dispatch(chatUserInfo(item))
+        console.log(item);
     }
+
+    // let handleFriendMsg = (item) => {
+    //     // localStorage.removeItem('connectedfriend');
+    //     localStorage.removeItem('connectedfriend');
+    //     let friendsArr = [{
+    //         friendid: item.friendid,
+    //         friendphoto: item.friendphoto,
+    //         friendemail: item.friendmail,
+    //         friendname: item.friendname,
+    //         type: "single",
+    //     }];
+
+    //     localStorage.setItem('connectedfriend', JSON.stringify(friendsArr));
+    //     dispatch(chatUserInfo(friendsArr));
+    //     // console.log(friendsArr[0].friendname);
+    // }
+
+    // msg to my groups
+    // let handleMygroupMsg = (item) => {
+    //     console.log('clicked', item);
+    //     localStorage.removeItem('connectedfriend');
+    //     localStorage.setItem('connectedfriend', JSON.stringify(item));
+    //     dispatch(activechat({ ...item, type: "mygroup" }))
+    // }
+
+    // msg to joined group
+    // let handleJoinedGrp = (item) => {
+    //     console.log('clicked', item);
+    //     localStorage.removeItem('connectedfriend');
+    //     localStorage.setItem('connectedfriend', JSON.stringify(item));
+    //     dispatch(activechat({ ...item, type: "joined" }))
+    // }
 
     return (
         <>
@@ -124,7 +159,7 @@ const Connected = () => {
                         </div>
                     ))
                 }
-                {
+                {/* {
                     myGroup.map((item, index) => (
                         <div key={index} className="usermainbox">
                             <div className="useritem">
@@ -142,7 +177,7 @@ const Connected = () => {
                                     </div>
                                     <span>
                                         <Button title='block user' size="small" color="error">
-                                            <AiFillMessage />
+                                            <AiFillMessage onClick={() => handleMygroupMsg(item)} />
                                         </Button>
                                     </span>
                                 </div>
@@ -167,14 +202,14 @@ const Connected = () => {
                                     </div>
                                     <span>
                                         <Button title='message' size="small" color="error">
-                                            <AiFillMessage />
+                                            <AiFillMessage onClick={() => handleJoinedGrp(item)} />
                                         </Button>
                                     </span>
                                 </div>
                             </div>
                         </div>
                     ))
-                }
+                } */}
             </GroupCard >
         </>
     )
