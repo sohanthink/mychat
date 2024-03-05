@@ -95,7 +95,7 @@ const Connected = () => {
         // console.log('clicked', item);
         localStorage.removeItem('connectedfriend');
         localStorage.setItem('connectedfriend', JSON.stringify(item));
-        dispatch(chatUserInfo(item))
+        dispatch(chatUserInfo({ ...item, type: "single" }))
         // console.log(item);
     }
 

@@ -9,6 +9,7 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { FaCamera } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment/moment';
 
 
 
@@ -47,10 +48,13 @@ const Chat = () => {
 
 
     let dispatch = useDispatch()
-
+    const userdata = useSelector(state => state.loginuserdata.value);
+    console.log(userdata);
     const activechatdata = useSelector((state) => state.activechat.activechat)
     // console.log(state);
     console.log(activechatdata);
+
+    let [msg, setMsg] = useState("")
 
     let [activechatName, setActiveChatNAme] = useState("")
     // if (activechatdata == null) {
@@ -58,21 +62,56 @@ const Chat = () => {
     // }
 
 
-    useEffect(() => {
-        let activeChatName = ''
-        if (activechatdata != null) {
-            if (activechatdata.friendname) {
-                activeChatName = activechatdata.friendname
-            } else if (activechatdata.type == 'mygroup') {
-                activeChatName = activechatdata.groupname
-            } else if (activechatdata.type == 'joined') {
-                activeChatName = activechatdata.groupname
+    // useEffect(() => {
+    //     let activeChatName = ''
+    //     if (activechatdata != null) {
+    //         if (activechatdata.friendname) {
+    //             activeChatName = activechatdata.friendname
+    //         } else if (activechatdata.type == 'mygroup') {
+    //             activeChatName = activechatdata.groupname
+    //         } else if (activechatdata.type == 'joined') {
+    //             activeChatName = activechatdata.groupname
+    //         }
+    //     }
+    //     setActiveChatNAme(activeChatName)
+
+    // }, [])
+
+    let handleMessage = () => {
+        if (activechatdata.type == "single") {
+            let data = ({
+                whosendname: userdata.displayName,
+                whosendid: userdata.uid,
+                whoreceivedname: activechatdata.friendname,
+                whoreceivedid: activechatdata.friendid,
+                message: msg,
+                date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDay()} ${new Date().getHours()}:${new Date().getMinutes()}`
+            })
+            console.log(data);
+        } else {
+            if (activechatdata.type == "mygroup") {
+                let data = ({
+                    whosendname: userdata.displayName,
+                    whosendid: userdata.uid,
+                    whoreceivedname: activechatdata.groupname,
+                    whoreceivedid: activechatdata.mygrpid,
+                    message: msg,
+                    date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDay()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                })
+                console.log(data);
+            } else {
+                let data = ({
+                    whosendname: userdata.displayName,
+                    whosendid: userdata.uid,
+                    whoreceivedname: activechatdata.groupname,
+                    whoreceivedid: activechatdata.groupid,
+                    message: msg,
+                    date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`,
+                })
+                console.log(data);
             }
         }
-        setActiveChatNAme(activeChatName)
-
-    }, [])
-
+    }
 
 
 
@@ -201,20 +240,20 @@ const Chat = () => {
                             </div>
                             <div className='msg'>
                                 <p className='sendmsg'>hi,</p>
-                                <h6 className='time'>Today,10.30</h6>
+                                <h6 className='time'>{moment("2024-3-5 20:19", "YYYYMMDD hh:mm").fromNow()}</h6>
                             </div>
                         </div>
                     </div>
                     <div className="message_navigation">
                         <div className="message_navigation_body">
                             <div className='msgbox'>
-                                <input className='msgwrite' type="text" />
+                                <input className='msgwrite' onChange={(e) => setMsg(e.target.value)} type="text" />
                                 <div className="icons">
                                     <MdEmojiEmotions />
                                     <FaCamera />
                                 </div>
                             </div>
-                            <button><IoSend />
+                            <button onClick={handleMessage}><IoSend />
                             </button>
                         </div>
                     </div>
