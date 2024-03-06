@@ -59,6 +59,7 @@ const Chat = () => {
     let [msg, setMsg] = useState("")
 
     let [singleMsgData, setSingleMsgdata] = useState([])
+    let [grpMsgData, setGrpMsgdata] = useState([])
 
     // let [activechatName, setActiveChatNAme] = useState("")
     // if (activechatdata == null) {
@@ -83,10 +84,25 @@ const Chat = () => {
     // let handleKeyDown = (event) => {
     // }
 
-    let handleMessage = (event) => {
-        // if (event.key == "Enter") {
-        //     console.log('pressed');
-        // }
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleMessage();
+        }
+    };
+
+
+    // let handleMsgInput = (e, event) => {
+    //     setMsg(e.target.value)
+    //     console.log(event);
+    //     // if (event.key == "Enter") {
+    //     //     // handleMessage()
+    //     //     console.log('pressed');
+    //     // }
+    // }
+
+
+    let handleMessage = () => {
         if (msg != "") {
             if (activechatdata.type == "single") {
                 set(push(ref(db, 'singlemsg/')), {
@@ -101,25 +117,27 @@ const Chat = () => {
                 })
             } else {
                 if (activechatdata.type == "mygroup") {
-                    let data = ({
+                    set(push(ref(db, 'groupmsg/')), {
                         whosendname: userdata.displayName,
                         whosendid: userdata.uid,
                         whoreceivedname: activechatdata.groupname,
                         whoreceivedid: activechatdata.mygrpid,
                         message: msg,
-                        date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDay()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                        date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)} ${('0' + new Date().getHours()).slice(-2)}:${('0' + new Date().getMinutes()).slice(-2)}`
+                    }).then(() => {
+                        setMsg("")
                     })
-                    console.log(data);
-                } else {
-                    let data = ({
+                } else if (activechatdata.type == "joined") {
+                    set(push(ref(db, 'groupmsg/')), {
                         whosendname: userdata.displayName,
                         whosendid: userdata.uid,
                         whoreceivedname: activechatdata.groupname,
                         whoreceivedid: activechatdata.groupid,
                         message: msg,
-                        date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`,
+                        date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)} ${('0' + new Date().getHours()).slice(-2)}:${('0' + new Date().getMinutes()).slice(-2)}`
+                    }).then(() => {
+                        setMsg("")
                     })
-                    console.log(data);
                 }
             }
         }
@@ -142,7 +160,20 @@ const Chat = () => {
             setSingleMsgdata(arr)
         });
     }, [activechatdata])
-    console.log(singleMsgData);
+
+    useEffect(() => {
+        const grpmsgRef = ref(db, 'groupmsg/');
+        onValue(grpmsgRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                if (item.val().whosendid == userdata.uid && item.val().whoreceivedid == activechatdata.groupid ||
+                    item.val().whosendid == activechatdata.groupid && item.val().whoreceivedid == userdata.uid) {
+                    arr.push(item.val())
+                }
+            })
+            setGrpMsgdata(arr)
+        });
+    }, [activechatdata])
 
 
 
@@ -280,13 +311,28 @@ const Chat = () => {
                                         </div>
                                 ))
                             }
+                            {
+                                grpMsgData.map((item) => (
+                                    item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.groupid || item.whoreceivedid == activechatdata.mygrpid
+                                        ?
+                                        <div className='msg'>
+                                            <p className='sendmsg'>{item.message}</p>
+                                            <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                        </div>
+                                        :
+                                        <div className='msg'>
+                                            <p className='getmsg'>{item.message}</p>
+                                            <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                        </div>
+                                ))
+                            }
                         </div>
                     </div>
 
                     <div className="message_navigation">
                         <div className="message_navigation_body">
                             <div className='msgbox'>
-                                <input className='msgwrite' value={msg} onChange={(e) => setMsg(e.target.value)} type="text" />
+                                <input onKeyDown={handleKeyDown} className='msgwrite' value={msg} onChange={(e) => setMsg(e.target.value)} type="text" />
                                 <div className="icons">
                                     <MdEmojiEmotions />
                                     <FaCamera />
