@@ -22,7 +22,7 @@ const Connected = () => {
     let [friends, setFriends] = useState([])
     let [myGroup, setMyGroup] = useState([])
     let [joinedGroup, setJoinedGroup] = useState([])
-    console.log(friends);
+    // console.log(friends);
 
     // my friends data from firebase
     useEffect(() => {
@@ -176,8 +176,8 @@ const Connected = () => {
                                         </>
                                     </div>
                                     <span>
-                                        <Button title='block user' size="small" color="error">
-                                            <AiFillMessage onClick={() => handleMygroupMsg(item)} />
+                                        <Button onClick={() => handleMygroupMsg(item)} title='block user' size="small" color="error">
+                                            <AiFillMessage />
                                         </Button>
                                     </span>
                                 </div>
@@ -201,8 +201,8 @@ const Connected = () => {
                                         </>
                                     </div>
                                     <span>
-                                        <Button title='message' size="small" color="error">
-                                            <AiFillMessage onClick={() => handleJoinedGrp(item)} />
+                                        <Button onClick={() => handleJoinedGrp(item)} title='message' size="small" color="error">
+                                            <AiFillMessage />
                                         </Button>
                                     </span>
                                 </div>

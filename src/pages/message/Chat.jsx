@@ -10,6 +10,7 @@ import { FaCamera } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment/moment';
+import { getDatabase, ref, set, push, onValue } from "firebase/database";
 
 
 
@@ -47,16 +48,19 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 const Chat = () => {
 
 
+    const db = getDatabase();
+
     let dispatch = useDispatch()
     const userdata = useSelector(state => state.loginuserdata.value);
     console.log(userdata);
     const activechatdata = useSelector((state) => state.activechat.activechat)
-    // console.log(state);
     console.log(activechatdata);
 
     let [msg, setMsg] = useState("")
 
-    let [activechatName, setActiveChatNAme] = useState("")
+    let [singleMsgData, setSingleMsgdata] = useState([])
+
+    // let [activechatName, setActiveChatNAme] = useState("")
     // if (activechatdata == null) {
     //     return
     // }
@@ -76,43 +80,69 @@ const Chat = () => {
     //     setActiveChatNAme(activeChatName)
 
     // }, [])
+    // let handleKeyDown = (event) => {
+    // }
 
-    let handleMessage = () => {
-        if (activechatdata.type == "single") {
-            let data = ({
-                whosendname: userdata.displayName,
-                whosendid: userdata.uid,
-                whoreceivedname: activechatdata.friendname,
-                whoreceivedid: activechatdata.friendid,
-                message: msg,
-                date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDay()} ${new Date().getHours()}:${new Date().getMinutes()}`
-            })
-            console.log(data);
-        } else {
-            if (activechatdata.type == "mygroup") {
-                let data = ({
+    let handleMessage = (event) => {
+        // if (event.key == "Enter") {
+        //     console.log('pressed');
+        // }
+        if (msg != "") {
+            if (activechatdata.type == "single") {
+                set(push(ref(db, 'singlemsg/')), {
                     whosendname: userdata.displayName,
                     whosendid: userdata.uid,
-                    whoreceivedname: activechatdata.groupname,
-                    whoreceivedid: activechatdata.mygrpid,
+                    whoreceivedname: activechatdata.friendname,
+                    whoreceivedid: activechatdata.friendid,
                     message: msg,
-                    date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDay()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                    date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)} ${('0' + new Date().getHours()).slice(-2)}:${('0' + new Date().getMinutes()).slice(-2)}`
+                }).then(() => {
+                    setMsg("")
                 })
-                console.log(data);
             } else {
-                let data = ({
-                    whosendname: userdata.displayName,
-                    whosendid: userdata.uid,
-                    whoreceivedname: activechatdata.groupname,
-                    whoreceivedid: activechatdata.groupid,
-                    message: msg,
-                    date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`,
-                })
-                console.log(data);
+                if (activechatdata.type == "mygroup") {
+                    let data = ({
+                        whosendname: userdata.displayName,
+                        whosendid: userdata.uid,
+                        whoreceivedname: activechatdata.groupname,
+                        whoreceivedid: activechatdata.mygrpid,
+                        message: msg,
+                        date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDay()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                    })
+                    console.log(data);
+                } else {
+                    let data = ({
+                        whosendname: userdata.displayName,
+                        whosendid: userdata.uid,
+                        whoreceivedname: activechatdata.groupname,
+                        whoreceivedid: activechatdata.groupid,
+                        message: msg,
+                        date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`,
+                    })
+                    console.log(data);
+                }
             }
         }
+
+
+
     }
 
+    useEffect(() => {
+        const singlemsgRef = ref(db, 'singlemsg/');
+        onValue(singlemsgRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                console.log(item.val());
+                if (item.val().whosendid == userdata.uid && item.val().whoreceivedid == activechatdata.friendid ||
+                    item.val().whosendid == activechatdata.friendid && item.val().whoreceivedid == userdata.uid) {
+                    arr.push(item.val())
+                }
+            })
+            setSingleMsgdata(arr)
+        });
+    }, [activechatdata])
+    console.log(singleMsgData);
 
 
 
@@ -129,7 +159,7 @@ const Chat = () => {
                                 variant="dot">
                                 {
                                     activechatdata != '' ?
-                                        <Avatar sx={{ width: '70px', height: '70px' }} alt="Remy Sharp" src={activechatdata.friendphoto} />
+                                        <Avatar sx={{ width: '70px', height: '70px' }} alt="Remy Sharp" src={activechatdata != null ? activechatdata.friendphoto : ""} />
                                         :
                                         <Avatar sx={{ width: '70px', height: '70px' }} alt="Remy Sharp" src="https://cdn.vox-cdn.com/thumbor/2E78dg_Cpbdh3nv6z0KKhOhYs6c=/0x0:1100x580/1200x800/filters:focal(520x151:696x327)/cdn.vox-cdn.com/uploads/chorus_image/image/71921482/bkq6gtrpcnw43vsm5zm62q3z.0.png" />
                                 }
@@ -137,13 +167,15 @@ const Chat = () => {
                         </div>
                         <div>
                             <h3>
-                                {
+                                {activechatdata != null ?
                                     activechatdata.friendname ?
                                         activechatdata.friendname
                                         :
                                         activechatdata.groupname.type == "mygroup" ?
                                             activechatdata.groupname :
                                             activechatdata.groupname
+                                    :
+                                    ""
                                 }
                                 {/* {
                                     activechatdata != null &&
@@ -156,10 +188,9 @@ const Chat = () => {
                     </div>
                     <div className="message_body">
                         <div className="message_body_container">
-                            <div className='msg'>
+                            {/* <div className='msg'>
                                 <p className='getmsg'>hi, this is nai</p>
                                 <h6 className='time'>Today,10.30</h6>
-
                             </div>
                             <div className='msg'>
                                 <p className='sendmsg'>hi, this is nai</p>
@@ -219,10 +250,6 @@ const Chat = () => {
                                 </p>
                             </div>
                             <div className='msg'>
-                                <p className='getmsg'>hi, this is nai</p>
-                                <h6 className='time'>Today,10.30</h6>
-                            </div>
-                            <div className='msg'>
                                 <p className='sendmsg'>hi, this is nai</p>
                                 <h6 className='time'>Today,10.30</h6>
                             </div>
@@ -236,18 +263,30 @@ const Chat = () => {
                             </div>
                             <div className='msg'>
                                 <p className='sendmsg'>hi, this is nai</p>
-                                <h6 className='time'>Today,10.30</h6>
-                            </div>
-                            <div className='msg'>
-                                <p className='sendmsg'>hi,</p>
                                 <h6 className='time'>{moment("2024-3-5 20:19", "YYYYMMDD hh:mm").fromNow()}</h6>
-                            </div>
+                            </div> */}
+                            {
+                                singleMsgData.map((item) => (
+                                    item.whosendid == userdata.uid
+                                        ?
+                                        <div className='msg'>
+                                            <p className='sendmsg'>{item.message}</p>
+                                            <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                        </div>
+                                        :
+                                        <div className='msg'>
+                                            <p className='getmsg'>{item.message}</p>
+                                            <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                        </div>
+                                ))
+                            }
                         </div>
                     </div>
+
                     <div className="message_navigation">
                         <div className="message_navigation_body">
                             <div className='msgbox'>
-                                <input className='msgwrite' onChange={(e) => setMsg(e.target.value)} type="text" />
+                                <input className='msgwrite' value={msg} onChange={(e) => setMsg(e.target.value)} type="text" />
                                 <div className="icons">
                                     <MdEmojiEmotions />
                                     <FaCamera />
