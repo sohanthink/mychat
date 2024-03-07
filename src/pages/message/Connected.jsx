@@ -99,25 +99,9 @@ const Connected = () => {
         // console.log(item);
     }
 
-    // let handleFriendMsg = (item) => {
-    //     // localStorage.removeItem('connectedfriend');
-    //     localStorage.removeItem('connectedfriend');
-    //     let friendsArr = [{
-    //         friendid: item.friendid,
-    //         friendphoto: item.friendphoto,
-    //         friendemail: item.friendmail,
-    //         friendname: item.friendname,
-    //         type: "single",
-    //     }];
-
-    //     localStorage.setItem('connectedfriend', JSON.stringify(friendsArr));
-    //     dispatch(chatUserInfo(friendsArr));
-    //     // console.log(friendsArr[0].friendname);
-    // }
-
     // msg to my groups
     let handleMygroupMsg = (item) => {
-        console.log('clicked', item);
+        // console.log('clicked', item);
         localStorage.removeItem('connectedfriend');
         localStorage.setItem('connectedfriend', JSON.stringify(item));
         dispatch(chatUserInfo({ ...item, type: "mygroup" }))
@@ -125,7 +109,7 @@ const Connected = () => {
 
     // msg to joined group
     let handleJoinedGrp = (item) => {
-        console.log('clicked', item);
+        // console.log('clicked', item);
         localStorage.removeItem('connectedfriend');
         localStorage.setItem('connectedfriend', JSON.stringify(item));
         dispatch(chatUserInfo({ ...item, type: "joined" }))
