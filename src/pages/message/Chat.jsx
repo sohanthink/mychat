@@ -270,51 +270,54 @@ const Chat = () => {
                             </div> */}
 
                             {
-                                activechatdata.type == "single" ?
-                                    singleMsgData.map((item) => (
-                                        item.whosendid == userdata.uid
-                                            ?
-                                            <div className='msg'>
-                                                <p className='sendmsg'>{item.message}</p>
-                                                <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
-                                            </div>
-                                            :
-                                            <div className='msg'>
-                                                <p className='getmsg'>{item.message}</p>
-                                                <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
-                                            </div>
-                                    ))
-                                    :
-                                    activechatdata.type == "mygroup"
-                                        ?
-                                        grpMsgData.map((item) => (
-                                            item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.mygrpid
+                                activechatdata ?
+                                    activechatdata.type == "single" ?
+                                        singleMsgData.map((item) => (
+                                            item.whosendid == userdata.uid
                                                 ?
                                                 <div className='msg'>
                                                     <p className='sendmsg'>{item.message}</p>
-                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
                                                 </div>
-                                                : item.whoreceivedid == activechatdata.mygrpid &&
+                                                :
                                                 <div className='msg'>
                                                     <p className='getmsg'>{item.message}</p>
-                                                    <h6 className='time'> {moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
                                                 </div>
                                         ))
                                         :
-                                        activechatdata.type == "joined" &&
-                                        grpMsgData.map((item) => (
-                                            item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.groupid
-                                                ?
-                                                <div className='msg'>
-                                                    <p className='sendmsg'>{item.message}</p>
-                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
-                                                </div>
-                                                : item.whoreceivedid == activechatdata.groupid &&
-                                                < div className='msg' >
-                                                    <p className='getmsg'>{item.message}</p>
-                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
-                                                </div>
-                                        ))
+                                        activechatdata.type == "mygroup"
+                                            ?
+                                            grpMsgData.map((item) => (
+                                                item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.mygrpid
+                                                    ?
+                                                    <div className='msg'>
+                                                        <p className='sendmsg'>{item.message}</p>
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                    </div>
+                                                    : item.whoreceivedid == activechatdata.mygrpid &&
+                                                    <div className='msg'>
+                                                        <p className='getmsg'>{item.message}</p>
+                                                        <h6 className='time'> {moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                    </div>
+                                            ))
+                                            :
+                                            activechatdata.type == "joined" &&
+                                            grpMsgData.map((item) => (
+                                                item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.groupid
+                                                    ?
+                                                    <div className='msg'>
+                                                        <p className='sendmsg'>{item.message}</p>
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                    </div>
+                                                    : item.whoreceivedid == activechatdata.groupid &&
+                                                    < div className='msg' >
+                                                        <p className='getmsg'>{item.message}</p>
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                    </div>
+                                            ))
+                                    :
+                                    ""
 
                             }
                         </div>
