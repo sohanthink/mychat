@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import './chat.css'
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
@@ -49,6 +49,18 @@ const Chat = () => {
 
     const [progressStatus, setProgressStatus] = useState(0);
 
+    const chatBoxRef = useRef(null);
+    const lastMessageRef = useRef(null);
+
+    const scrollToBottom = () => {
+        if (chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }
+    };
+
+    // useEffect(() => {
+    //     scrollToBottom();
+    // }, [singleMsgData, grpMsgData]);
 
 
     const db = getDatabase();
@@ -71,6 +83,8 @@ const Chat = () => {
             handleMessage();
         }
     };
+
+
 
 
     let handleMessage = () => {
@@ -125,8 +139,11 @@ const Chat = () => {
                 }
             })
             setSingleMsgdata(arr)
+            if (lastMessageRef.current) {
+                lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+            }
         });
-    }, [activechatdata])
+    }, [activechatdata, lastMessageRef.current])
 
     useEffect(() => {
         const grpmsgRef = ref(db, 'groupmsg/');
@@ -136,8 +153,11 @@ const Chat = () => {
                 arr.push(item.val())
             })
             setGrpMsgdata(arr)
+            if (lastMessageRef.current) {
+                lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+            }
         });
-    }, [activechatdata])
+    }, [activechatdata, lastMessageRef.current])
 
     // console.log(activechatdata.mygrpid);
 
@@ -219,6 +239,9 @@ const Chat = () => {
 
     }
 
+
+
+
     return (
         <>
             <div className="chat">
@@ -258,8 +281,8 @@ const Chat = () => {
                             <h6>online</h6>
                         </div>
                     </div>
-                    <div className="message_body">
-                        <div className="message_body_container">
+                    <div ref={chatBoxRef} className="message_body">
+                        <div className="message_body_container ">
                             {/* <div className='msg'>
                                 <p className='getmsg'>hi, this is nai</p>
                                 <h6 className='time'>Today,10.30</h6>
@@ -341,7 +364,7 @@ const Chat = () => {
                             {
                                 activechatdata ?
                                     activechatdata.type == "single" ?
-                                        singleMsgData.map((item) => (
+                                        singleMsgData.map((item, index) => (
                                             item.whosendid == userdata.uid
                                                 ?
                                                 <div className='msg'>
@@ -353,12 +376,13 @@ const Chat = () => {
                                                                     {item.message}
                                                                 </p>
                                                                 <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
-
+                                                                {index === singleMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                             </>
                                                             :
                                                             <p className='sendimg'>
                                                                 <Image source={item.img} />
                                                                 <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                                {index === singleMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                             </p>
                                                     }
 
@@ -371,44 +395,51 @@ const Chat = () => {
                                                             ?
                                                             <p className='getmsg'>
                                                                 {item.message}
+
                                                             </p>
                                                             :
                                                             <p className='getimg'>
                                                                 <Image source={item.img} />
+
                                                             </p>
                                                     }
                                                     <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                    {index === singleMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                 </div>
                                         ))
                                         :
                                         activechatdata.type == "mygroup"
                                             ?
-                                            grpMsgData.map((item) => (
+                                            grpMsgData.map((item, index) => (
                                                 item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.mygrpid
                                                     ?
                                                     <div className='msg'>
                                                         <p className='sendmsg'>{item.message}</p>
                                                         <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                     </div>
                                                     : item.whoreceivedid == activechatdata.mygrpid &&
                                                     <div className='msg'>
                                                         <p className='getmsg'>{item.message}</p>
                                                         <h6 className='time'> {moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                     </div>
                                             ))
                                             :
                                             activechatdata.type == "joined" &&
-                                            grpMsgData.map((item) => (
+                                            grpMsgData.map((item, index) => (
                                                 item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.groupid
                                                     ?
                                                     <div className='msg'>
                                                         <p className='sendmsg'>{item.message}</p>
                                                         <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                     </div>
                                                     : item.whoreceivedid == activechatdata.groupid &&
                                                     < div className='msg' >
                                                         <p className='getmsg'>{item.message}</p>
                                                         <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                     </div>
                                             ))
                                     :
