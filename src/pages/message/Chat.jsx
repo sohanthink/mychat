@@ -11,7 +11,7 @@ import { IoSend } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment/moment';
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
-
+import { getStorage, ref as imgref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -49,6 +49,7 @@ const Chat = () => {
 
 
     const db = getDatabase();
+    const storage = getStorage();
 
     let dispatch = useDispatch()
     const userdata = useSelector(state => state.loginuserdata.value);
@@ -108,9 +109,6 @@ const Chat = () => {
                 }
             }
         }
-
-
-
     }
 
     useEffect(() => {
@@ -132,16 +130,7 @@ const Chat = () => {
         onValue(grpmsgRef, (snapshot) => {
             let arr = []
             snapshot.forEach((item) => {
-                // if (item.val().whosendid == userdata.uid && item.val().whoreceivedid == activechatdata.groupid ||
-                //     item.val().whosendid == activechatdata.groupid && item.val().whoreceivedid == userdata.uid) {
-                //     arr.push(item.val())
-                // }
                 arr.push(item.val())
-                // if (item.val().whosendid == userdata.uid && item.val().whoreceivedid == activechatdata.mygrpid ||
-                //     item.val().whosendid == activechatdata.mygrpid && item.val().whoreceivedid == userdata.uid) {
-                //     arr.push(item.val())
-                // }
-
             })
             setGrpMsgdata(arr)
         });
@@ -149,6 +138,81 @@ const Chat = () => {
 
     // console.log(activechatdata.mygrpid);
 
+    let handleImgUpload = (e) => {
+        let mainimg = (e.target.files[0]);
+        const storageRef = imgref(storage, `messageimg/${e.target.files[0].name}`);
+        const uploadTask = uploadBytesResumable(storageRef, mainimg);
+
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                }
+            },
+            (error) => {
+                // Handle unsuccessful uploads
+            },
+            () => {
+                // Handle successful uploads on complete
+                // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+
+
+
+                    if (activechatdata.type == "single") {
+                        set(push(ref(db, 'singlemsg/')), {
+                            whosendname: userdata.displayName,
+                            whosendid: userdata.uid,
+                            whoreceivedname: activechatdata.friendname,
+                            whoreceivedid: activechatdata.friendid,
+                            img: downloadURL,
+                            date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)} ${('0' + new Date().getHours()).slice(-2)}:${('0' + new Date().getMinutes()).slice(-2)}`
+                        }).then(() => {
+                            setMsg("")
+                        })
+                    } else {
+                        if (activechatdata.type == "mygroup") {
+                            set(push(ref(db, 'groupmsg/')), {
+                                whosendname: userdata.displayName,
+                                whosendid: userdata.uid,
+                                whoreceivedname: activechatdata.groupname,
+                                whoreceivedid: activechatdata.mygrpid,
+                                img: downloadURL,
+                                date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)} ${('0' + new Date().getHours()).slice(-2)}:${('0' + new Date().getMinutes()).slice(-2)}`
+                            }).then(() => {
+                                setMsg("")
+                            })
+                        } else if (activechatdata.type == "joined") {
+                            set(push(ref(db, 'groupmsg/')), {
+                                whosendname: userdata.displayName,
+                                whosendid: userdata.uid,
+                                whoreceivedname: activechatdata.groupname,
+                                whoreceivedid: activechatdata.groupid,
+                                img: downloadURL,
+                                date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)} ${('0' + new Date().getHours()).slice(-2)}:${('0' + new Date().getMinutes()).slice(-2)}`
+                            }).then(() => {
+                                setMsg("")
+                            })
+                        }
+                    }
+
+
+
+                });
+            }
+        );
+
+    }
 
     return (
         <>
@@ -276,12 +340,30 @@ const Chat = () => {
                                             item.whosendid == userdata.uid
                                                 ?
                                                 <div className='msg'>
-                                                    <p className='sendmsg'>{item.message}</p>
+                                                    {item.message
+                                                        ?
+                                                        <p className='sendmsg'>
+                                                            {item.message}
+                                                        </p>
+                                                        :
+                                                        <p className='sendimg'>
+                                                            <Image source={item.img} />
+                                                        </p>
+                                                    }
                                                     <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
                                                 </div>
                                                 :
                                                 <div className='msg'>
-                                                    <p className='getmsg'>{item.message}</p>
+                                                    {item.message
+                                                        ?
+                                                        <p className='getmsg'>
+                                                            {item.message}
+                                                        </p>
+                                                        :
+                                                        <p className='getimg'>
+                                                            <Image source={item.img} />
+                                                        </p>
+                                                    }
                                                     <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
                                                 </div>
                                         ))
@@ -293,7 +375,7 @@ const Chat = () => {
                                                     ?
                                                     <div className='msg'>
                                                         <p className='sendmsg'>{item.message}</p>
-                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
                                                     </div>
                                                     : item.whoreceivedid == activechatdata.mygrpid &&
                                                     <div className='msg'>
@@ -308,7 +390,7 @@ const Chat = () => {
                                                     ?
                                                     <div className='msg'>
                                                         <p className='sendmsg'>{item.message}</p>
-                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
                                                     </div>
                                                     : item.whoreceivedid == activechatdata.groupid &&
                                                     < div className='msg' >
@@ -329,7 +411,10 @@ const Chat = () => {
                                 <input onKeyDown={handleKeyDown} className='msgwrite' value={msg} onChange={(e) => setMsg(e.target.value)} type="text" />
                                 <div className="icons">
                                     <MdEmojiEmotions />
-                                    <FaCamera />
+                                    <label>
+                                        <input onChange={handleImgUpload} type="file" hidden />
+                                        <FaCamera />
+                                    </label>
                                 </div>
                             </div>
                             <button onClick={handleMessage}><IoSend />
