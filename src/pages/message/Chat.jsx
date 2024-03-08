@@ -49,28 +49,23 @@ const Chat = () => {
 
     const [progressStatus, setProgressStatus] = useState(0);
 
+    // last message preview always when send msg
     const chatBoxRef = useRef(null);
     const lastMessageRef = useRef(null);
-
     const scrollToBottom = () => {
         if (chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
         }
     };
 
-    // useEffect(() => {
-    //     scrollToBottom();
-    // }, [singleMsgData, grpMsgData]);
-
-
     const db = getDatabase();
     const storage = getStorage();
 
+    // data from redux
     let dispatch = useDispatch()
     const userdata = useSelector(state => state.loginuserdata.value);
-    // console.log(userdata);
     const activechatdata = useSelector((state) => state.activechat.activechat)
-    // console.log(activechatdata);
+
 
     let [msg, setMsg] = useState("")
 
@@ -78,6 +73,7 @@ const Chat = () => {
     let [grpMsgData, setGrpMsgdata] = useState([])
 
 
+    // send message when press enter
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             handleMessage();
@@ -85,8 +81,7 @@ const Chat = () => {
     };
 
 
-
-
+    // send message to the database
     let handleMessage = () => {
         if (msg != "") {
             if (activechatdata.type == "single") {
@@ -128,6 +123,7 @@ const Chat = () => {
         }
     }
 
+    // fetch single message data from firebase
     useEffect(() => {
         const singlemsgRef = ref(db, 'singlemsg/');
         onValue(singlemsgRef, (snapshot) => {
@@ -145,6 +141,7 @@ const Chat = () => {
         });
     }, [activechatdata, lastMessageRef.current])
 
+    // fetch group message data from firebase  
     useEffect(() => {
         const grpmsgRef = ref(db, 'groupmsg/');
         onValue(grpmsgRef, (snapshot) => {
@@ -159,8 +156,8 @@ const Chat = () => {
         });
     }, [activechatdata, lastMessageRef.current])
 
-    // console.log(activechatdata.mygrpid);
 
+    // image send from chat to database
     let handleImgUpload = (e) => {
         let mainimg = (e.target.files[0]);
         const storageRef = imgref(storage, `messageimg/${e.target.files[0].name}`);
@@ -171,16 +168,8 @@ const Chat = () => {
                 // Observe state change events such as progress, pause, and resume
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
+                // console.log('Upload is ' + progress + '% done');
                 setProgressStatus(progress)
-                switch (snapshot.state) {
-                    case 'paused':
-                        console.log('Upload is paused');
-                        break;
-                    case 'running':
-                        console.log('Upload is running');
-                        break;
-                }
             },
             (error) => {
                 // Handle unsuccessful uploads
@@ -191,8 +180,6 @@ const Chat = () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     console.log('File available at', downloadURL);
                     setProgressStatus(0)
-
-
 
                     if (activechatdata.type == "single") {
                         set(push(ref(db, 'singlemsg/')), {
@@ -230,9 +217,6 @@ const Chat = () => {
                             })
                         }
                     }
-
-
-
                 });
             }
         );
@@ -379,11 +363,13 @@ const Chat = () => {
                                                                 {index === singleMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                             </>
                                                             :
-                                                            <p className='sendimg'>
-                                                                <Image source={item.img} />
-                                                                <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                            <>
+                                                                <p className='sendimg'>
+                                                                    <Image source={item.img} />
+                                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                                </p>
                                                                 {index === singleMsgData.length - 1 && <div ref={lastMessageRef} />}
-                                                            </p>
+                                                            </>
                                                     }
 
 
