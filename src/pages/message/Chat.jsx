@@ -14,6 +14,8 @@ import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { getStorage, ref as imgref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
+
+
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
         backgroundColor: '#44b700',
@@ -43,9 +45,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
 }));
 
-
-
 const Chat = () => {
+
+    const [progressStatus, setProgressStatus] = useState(0);
+
 
 
     const db = getDatabase();
@@ -149,6 +152,7 @@ const Chat = () => {
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');
+                setProgressStatus(progress)
                 switch (snapshot.state) {
                     case 'paused':
                         console.log('Upload is paused');
@@ -166,6 +170,7 @@ const Chat = () => {
                 // For instance, get the download URL: https://firebasestorage.googleapis.com/...
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     console.log('File available at', downloadURL);
+                    setProgressStatus(0)
 
 
 
@@ -340,29 +345,37 @@ const Chat = () => {
                                             item.whosendid == userdata.uid
                                                 ?
                                                 <div className='msg'>
-                                                    {item.message
-                                                        ?
-                                                        <p className='sendmsg'>
-                                                            {item.message}
-                                                        </p>
-                                                        :
-                                                        <p className='sendimg'>
-                                                            <Image source={item.img} />
-                                                        </p>
+                                                    {
+                                                        item.message
+                                                            ?
+                                                            <>
+                                                                <p className='sendmsg'>
+                                                                    {item.message}
+                                                                </p>
+                                                                <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+
+                                                            </>
+                                                            :
+                                                            <p className='sendimg'>
+                                                                <Image source={item.img} />
+                                                                <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                            </p>
                                                     }
-                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+
+
                                                 </div>
                                                 :
                                                 <div className='msg'>
-                                                    {item.message
-                                                        ?
-                                                        <p className='getmsg'>
-                                                            {item.message}
-                                                        </p>
-                                                        :
-                                                        <p className='getimg'>
-                                                            <Image source={item.img} />
-                                                        </p>
+                                                    {
+                                                        item.message
+                                                            ?
+                                                            <p className='getmsg'>
+                                                                {item.message}
+                                                            </p>
+                                                            :
+                                                            <p className='getimg'>
+                                                                <Image source={item.img} />
+                                                            </p>
                                                     }
                                                     <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
                                                 </div>
@@ -417,7 +430,15 @@ const Chat = () => {
                                     </label>
                                 </div>
                             </div>
-                            <button onClick={handleMessage}><IoSend />
+                            <button onClick={handleMessage}>
+                                {
+                                    progressStatus != 0
+                                        ?
+                                        <div>
+                                            {Math.round(progressStatus)}%
+                                        </div>
+                                        :
+                                        <IoSend />}
                             </button>
                         </div>
                     </div>
