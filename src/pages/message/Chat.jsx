@@ -381,12 +381,10 @@ const Chat = () => {
                                                             ?
                                                             <p className='getmsg'>
                                                                 {item.message}
-
                                                             </p>
                                                             :
                                                             <p className='getimg'>
                                                                 <Image source={item.img} />
-
                                                             </p>
                                                     }
                                                     <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
@@ -400,15 +398,51 @@ const Chat = () => {
                                                 item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.mygrpid
                                                     ?
                                                     <div className='msg'>
+                                                        {
+                                                            item.message
+                                                                ?
+                                                                <>
+                                                                    <p className='sendmsg'>
+                                                                        {item.message}
+                                                                    </p>
+                                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                                    {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+                                                                </>
+                                                                :
+                                                                <>
+                                                                    <p className='sendimg'>
+                                                                        <Image source={item.img} />
+                                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                                    </p>
+                                                                    {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+                                                                </>
+                                                        }
+
+
+                                                        {/*                                                         
                                                         <p className='sendmsg'>{item.message}</p>
                                                         <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
-                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />} */}
                                                     </div>
                                                     : item.whoreceivedid == activechatdata.mygrpid &&
                                                     <div className='msg'>
+                                                        {
+                                                            item.message
+                                                                ?
+                                                                <p className='getmsg'>
+                                                                    {item.message}
+                                                                </p>
+                                                                :
+                                                                <p className='getimg'>
+                                                                    <Image source={item.img} />
+                                                                </p>
+                                                        }
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+                                                        {/*                                                         
                                                         <p className='getmsg'>{item.message}</p>
                                                         <h6 className='time'> {moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
-                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />} */}
                                                     </div>
                                             ))
                                             :
@@ -417,15 +451,53 @@ const Chat = () => {
                                                 item.whosendid == userdata.uid && item.whoreceivedid == activechatdata.groupid
                                                     ?
                                                     <div className='msg'>
+                                                        {
+                                                            item.message
+                                                                ?
+                                                                <>
+                                                                    <p className='sendmsg'>
+                                                                        {item.message}
+                                                                    </p>
+                                                                    <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                                    {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+                                                                </>
+                                                                :
+                                                                <>
+                                                                    <p className='sendimg'>
+                                                                        <Image source={item.img} />
+                                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                                    </p>
+                                                                    {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+                                                                </>
+                                                        }
+
+                                                        {/*                                                         
                                                         <p className='sendmsg'>{item.message}</p>
                                                         <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
-                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />} */}
                                                     </div>
                                                     : item.whoreceivedid == activechatdata.groupid &&
                                                     < div className='msg' >
-                                                        <p className='getmsg'>{item.message}</p>
-                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+
+                                                        {
+                                                            item.message
+                                                                ?
+                                                                <p className='getmsg'>
+                                                                    {item.message}
+                                                                </p>
+                                                                :
+                                                                <p className='getimg'>
+                                                                    <Image source={item.img} />
+                                                                </p>
+                                                        }
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
                                                         {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
+
+
+
+                                                        {/* <p className='getmsg'>{item.message}</p>
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()} by {item.whosendname}</h6>
+                                                        {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />} */}
                                                     </div>
                                             ))
                                     :
