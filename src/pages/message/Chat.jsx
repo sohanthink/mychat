@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment/moment';
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { getStorage, ref as imgref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-
+import EmojiPicker from 'emoji-picker-react';
 
 
 
@@ -437,7 +437,7 @@ const Chat = () => {
                                                                     <Image source={item.img} />
                                                                 </p>
                                                         }
-                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}  by {item.whosendname}</h6>
                                                         {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
                                                         {/*                                                         
                                                         <p className='getmsg'>{item.message}</p>
@@ -478,7 +478,6 @@ const Chat = () => {
                                                     </div>
                                                     : item.whoreceivedid == activechatdata.groupid &&
                                                     < div className='msg' >
-
                                                         {
                                                             item.message
                                                                 ?
@@ -490,7 +489,7 @@ const Chat = () => {
                                                                     <Image source={item.img} />
                                                                 </p>
                                                         }
-                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</h6>
+                                                        <h6 className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}  by {item.whosendname}</h6>
                                                         {index === grpMsgData.length - 1 && <div ref={lastMessageRef} />}
 
 
@@ -517,6 +516,7 @@ const Chat = () => {
                                         <input onChange={handleImgUpload} type="file" hidden />
                                         <FaCamera />
                                     </label>
+                                    <EmojiPicker />
                                 </div>
                             </div>
                             <button onClick={handleMessage}>
@@ -527,7 +527,11 @@ const Chat = () => {
                                             {Math.round(progressStatus)}%
                                         </div>
                                         :
-                                        <IoSend />}
+                                        <>
+                                            <IoSend />
+
+                                        </>
+                                }
                             </button>
                         </div>
                     </div>

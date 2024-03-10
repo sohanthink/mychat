@@ -16,6 +16,7 @@
     "@mui/lab": "^5.0.0-alpha.163",
     "@mui/material": "^5.15.3",
     "@reduxjs/toolkit": "^2.2.0",
+    "emoji-picker-react": "^4.8.0",
     "firebase": "^10.8.0",
     "formik": "^2.4.5",
     "material-ui-popup-state": "^5.0.10",
