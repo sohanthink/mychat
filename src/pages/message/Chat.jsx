@@ -224,6 +224,15 @@ const Chat = () => {
     }
 
 
+    let [emoji, setEmoji] = useState(false)
+    let handleEmoji = () => {
+        setEmoji(!emoji)
+    }
+
+    let handleEmojiClick = (emoji) => {
+        let emo = (emoji.emoji);
+        console.log(emo);
+    }
 
 
     return (
@@ -506,17 +515,23 @@ const Chat = () => {
                         </div>
                     </div>
 
+                    <div className="emo_child">
+                        {
+                            emoji &&
+                            <EmojiPicker onEmojiClick={handleEmojiClick} />
+                        }
+
+                    </div>
                     <div className="message_navigation">
                         <div className="message_navigation_body">
                             <div className='msgbox'>
                                 <input onKeyDown={handleKeyDown} className='msgwrite' value={msg} onChange={(e) => setMsg(e.target.value)} type="text" />
                                 <div className="icons">
-                                    <MdEmojiEmotions />
+                                    <MdEmojiEmotions onClick={handleEmoji} className='emo_parent' />
                                     <label>
                                         <input onChange={handleImgUpload} type="file" hidden />
                                         <FaCamera />
                                     </label>
-                                    <EmojiPicker />
                                 </div>
                             </div>
                             <button onClick={handleMessage}>

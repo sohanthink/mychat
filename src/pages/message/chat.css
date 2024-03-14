@@ -121,6 +121,14 @@
   top: 11px;
   color: #707070;
 }
+.chat .message_navigation .msgbox .icons .emo_parent {
+  position: relative;
+}
+.emo_child {
+  position: absolute;
+  bottom: 140px;
+  right: 210px;
+}
 .chat .message_navigation .msgbox .icons svg {
   padding: 0 5px;
   opacity: 0.9;
