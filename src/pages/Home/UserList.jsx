@@ -6,6 +6,22 @@ import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useSelector } from 'react-redux'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Snackbar, Alert } from '@mui/material';
+
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '0.5px solid #000',
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
+};
 
 const notify = () => {
     toast("Notification message!", {
@@ -16,6 +32,8 @@ const notify = () => {
 
 const UserList = () => {
     const db = getDatabase();
+    const [alertMessage, setAlertMessage] = useState('');
+    const [openAlert, setOpenAlert] = useState(false);
 
     let [userList, setUserList] = useState([])
     let [friendRequest, SetFriendRequest] = useState([])
@@ -28,6 +46,13 @@ const UserList = () => {
     // console.log(data);
 
 
+    // alert close logic
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
 
     // userlist from datatbase without map with friends ============================
     // useEffect(() => {
@@ -122,7 +147,9 @@ const UserList = () => {
             whoreceivedemail: item.email,
             whoreceivedphoto: item.profileImg,
         }).then(() => {
-            toast.success("FriendRequest Sent Success");
+            // toast.success("FriendRequest Sent Success");
+            setAlertMessage('FriendRequest sent successfully!')
+            setOpenAlert(true);
         })
     }
 
@@ -157,8 +184,13 @@ const UserList = () => {
 
     return (
         <>
-            <ToastContainer position='top-right' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick
-                rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' />
+            {/* <ToastContainer position='top-right' autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick
+                rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='light' /> */}
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right', }} open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                <Alert style={{ backgroundColor: '#ff9e80' }} onClose={handleCloseAlert} severity="primary" sx={{ width: '100%' }}>
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
 
             <GroupCard cardtitle='User Lists'>
                 {

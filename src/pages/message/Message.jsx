@@ -15,7 +15,7 @@ const Message = () => {
 
                 <Grid xs={6} md={6} xl={4} sx={{ marginBottom: '30px' }}>
                     <Connected />
-                    <Friends />
+
                 </Grid>
                 <Grid xs={6} md={6} xl={8} sx={{ padding: '0px 10px', marginBottom: '30px' }}>
                     <Chat />

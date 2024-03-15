@@ -17,3 +17,4 @@ All the features I have used on this application.
 - Real time message with friends
 - Create groups with friends and chat realtime
 - Notifications
+- post any post
